@@ -1,0 +1,127 @@
+FILTERING
+===========================================
+1.✅ Employee list: (DONE)
+	API: /v1.0/users
+	Filters:
+		1.full_name (text)
+		2.employee_id (text)
+		3.email (text)
+		4.designation_id (multiple_id)
+		5.status (text)
+
+2.✅ Work Shift: (DONE)
+	API: /v1.0/work-shifts
+	Filters:
+		1.name (text)
+		2.description (text)
+		3.type (text)
+
+3. Attendance:
+	Page: Daily Log
+	API: /v1.0/attendances
+	Filters:
+		1.user_id (multiple_id)
+		2.date (text)
+		3.worked_hour (number)
+		4.break_hour (number)
+		5.schedule_hour (number)
+		6.overtime (number)
+		7.status (text)
+	=====================================
+	Page: Attendance Details
+	API: /v3.0/attendances
+	Filters:
+		1.user_id (multiple_id)
+		2.worked_hour (number)
+
+4. Leave:
+	Page: Leaves
+	API: /v2.0/leaves
+	Filters:
+		1.user_id (multiple_id)
+		2.date (text)
+		3.type (text)
+		4.duration (number)
+		5.total_leave_hours (number)
+		6.status (text)
+
+5. Holiday:
+	API: /v1.0/holidays
+	Filters:
+		1.name (text)
+		2.start_date (text)
+		3.end_date (text)
+		4.repeat (bool)
+		5.description (text)
+		6.department_id (multiple_id)
+		
+6.✅ Project: (DONE)
+	API: /v1.0/projects
+	Filters:
+		1.name (text)
+		2.status (text)
+
+7.✅ Department:
+	API: /v1.0/departments
+	Filters:
+		1.name (text)
+		2.description (text)
+		
+8.✅ Payroll:
+	API: /v1.0/payruns
+	Filters:
+		1. period (text)
+		2. type (text)
+		3. is_considering_overtime (bool)
+		4. date (text)
+
+9.✅ Notification
+	API: /v1.0/users
+	Filters:
+		1. status (text) (read/unread)
+
+10.✅ Employment Status:
+	API: /v1.0/employment-statuses
+	Filters:
+		1.name (text)
+		2.description (text)
+		3.is_active (bool)
+
+14.✅ Jobs:
+	API: /v1.0/job-listings
+	Filters:
+		1.title (text)
+		2.type (text)
+		3.work_location_id (text)
+		4.experience_level (text)
+		5.salary (number)
+		6.post_on (text)
+		7.deadline (text)
+		8.job_platform_id (multiple_id)
+		9.number_of_candidates (number)
+		
+15.✅ Candidates:
+	API: /v1.0/candidates
+	Filters:
+		1. name (text)
+		2. job_id (text)
+		3. job_platform_id (multiple_id)
+		4. interview_date (text)
+		5. status (text)
+		
+
+16.✅ Assets:
+	API: /v1.0/user-assets
+	Filters:
+		1.name (text)
+		2.asset_code (text)
+		3.serial_no (text)
+		4.is_working (bool)
+		5.type (text)
+		6.date (text)
+		8.status (text)
+
+
+
+
+
