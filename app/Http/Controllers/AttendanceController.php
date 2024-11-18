@@ -1491,20 +1491,54 @@ class AttendanceController extends Controller
     {
         try {
             $this->storeActivity($request, "DUMMY activity", "DUMMY description");
-            if (!$request->user()->hasPermissionTo('attendance_view')) {
+
+            if (!$request->user()->hasPermissionTo('attendance_view') && !request()->boolean("show_my_data")) {
                 return response()->json([
                     "message" => "You can not perform this action"
                 ], 401);
             }
 
+                // Retrieve attendance settings.
+        $setting_attendance = $this->get_attendance_setting();
+
             $start_date = !empty($request->start_date) ? $request->start_date : Carbon::now()->startOfYear()->format('Y-m-d');
             $end_date = !empty($request->end_date) ? $request->end_date : Carbon::now()->endOfYear()->format('Y-m-d');
+
             $data = $this->attendanceComponent->getAttendanceV2Data();
 
 
-            $data["data_highlights"]["total_schedule_hours"] = collect(!empty($request->user_id)?[$request->user_id]:$data["data"]->pluck("user_id")->unique())->map(function($user_id) use($start_date,$end_date) {
-                 return $this->userManagementComponent->getScheduleInformationData($user_id,$start_date,$end_date)["total_capacity_hours"];
-            })->sum();
+            $scheduleInformations = collect(!empty($request->user_id)?[$request->user_id]:$data["data"]->pluck("user_id")->unique())->map(function($user_id) use($start_date,$end_date) {
+                return $this->userManagementComponent->getScheduleInformationData($user_id,$start_date,$end_date);
+           });
+
+            $data["data_highlights"]["total_schedule_hours"] = collect($scheduleInformations)->sum("total_capacity_hours");
+
+
+            $data['data_highlights']['total_leave_hours'] = max(
+                0,
+                $data['data_highlights']['total_schedule_hours'] - $data['data_highlights']['total_active_hours']
+            );
+
+              // Calculate work availability percentage.
+   if ($data['data_highlights']["total_available_hours"] == 0 || $data['data_highlights']['total_schedule_hours'] == 0) {
+    $data['data_highlights']['total_work_availability_per_centum'] = 0;
+} else {
+    $data['data_highlights']['total_work_availability_per_centum'] = ($data['data_highlights']["total_available_hours"] / $data['data_highlights']['total_schedule_hours']) * 100;
+}
+
+   // Determine work availability status based on settings.
+   if (!empty($setting_attendance->work_availability_definition)) {
+    if (empty($data["data"])) {
+        $data['data_highlights']['work_availability'] = 'no data';
+    } elseif ($data['data_highlights']['total_work_availability_per_centum'] >= $setting_attendance->work_availability_definition) {
+        $data['data_highlights']['work_availability'] = 'good';
+    } else {
+        $data['data_highlights']['work_availability'] = 'bad';
+    }
+} else {
+    $data['data_highlights']['work_availability'] = 'good';
+}
+
 
 
 

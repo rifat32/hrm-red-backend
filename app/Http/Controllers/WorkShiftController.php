@@ -537,7 +537,7 @@ if(!$fields_changed){
         $pivot_data = collect($user_ids)->mapWithKeys(function ($user_id) {
             return [$user_id => ['from_date' => now(), 'to_date' => null]];
         });
-        $employee_work_shift_history->users()->sync($pivot_data);
+        // $employee_work_shift_history->users()->sync($pivot_data);
 
 
 
@@ -1454,7 +1454,7 @@ if($work_shift->type !== "flexible") {
                 ], 404);
             }
 
-       
+
             WorkShift::destroy($existingIds);
 
 
