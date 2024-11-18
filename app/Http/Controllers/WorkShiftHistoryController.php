@@ -50,7 +50,7 @@ class WorkShiftHistoryController extends Controller
     /**
      *
      *     @OA\Delete(
-     *      path="/v1.0/work-shift-histories/{ids}/{user_id}",
+     *      path="/v1.0/work-shift-histories/{id}/{user_id}",
      *      operationId="deleteWorkShiftHistoriesByIds",
      *      tags={"work_shift_histories"},
      *       security={
@@ -101,7 +101,7 @@ class WorkShiftHistoryController extends Controller
      *     )
      */
 
-    public function deleteWorkShiftHistoriesByIds(Request $request, $ids,$user_id)
+    public function deleteWorkShiftHistoriesByIds(Request $request, $id,$user_id)
     {
 
         try {
@@ -112,49 +112,61 @@ class WorkShiftHistoryController extends Controller
                     "message" => "You can not perform this action"
                 ], 401);
             }
-            $all_manager_department_ids = $this->get_all_departments_of_manager();
-            $business_id =  auth()->user()->business_id;
-            $idsArray = explode(',', $ids);
 
-            $existingIds = EmployeeUserWorkShiftHistory::
 
-                whereIn('work_shift_id', $idsArray)
-                ->where('user_id', $user_id)
 
-                ->select('id')
-                ->get()
-                ->pluck('id')
-                ->toArray();
-
-            $nonExistingIds = array_diff($idsArray, $existingIds);
-
-            if (!empty($nonExistingIds)) {
-
-                return response()->json([
-                    "message" => "Some or all of the specified data do not exist."
-                ], 404);
-            }
-
-        $attendance =    Attendance::whereIn(
-                "work_shift_history_id",$existingIds
+        $attendance =    Attendance::where(
+                "work_shift_history_id",$id
             )
             ->first();
             if (!empty($attendance)) {
                 return response()->json([
-                    "message" => "Some attendance exists for this woek shift."
+                    "message" => "Some attendance exists for this work shift."
                 ], 404);
             }
 
-            EmployeeUserWorkShiftHistory::
+
+        $current_work_shift =  EmployeeUserWorkShiftHistory::
                 where('user_id', $user_id)
-                    ->whereIn('work_shift_id', $idsArray)
-                   ->delete();
+                ->orderByDesc("from_date")
+                ->first();
+
+
+        $deletable_work_shift =  EmployeeUserWorkShiftHistory::
+                where('user_id', $user_id)
+                ->where('work_shift_id', $id)
+                ->first();
+
+
+                if($current_work_shift->id == $deletable_work_shift->id) {
+                        return response()->json([
+                            "message" => "Can not update the current work shift"
+                        ], 404);
+                }
+
+
+                WorkShiftHistory::where([
+                    "id" => $current_work_shift->work_shift_id
+                ])
+                ->whereDate("from_date",">",$deletable_work_shift->from_date)
+                ->update([
+                    "from_date" => $deletable_work_shift->from_date
+                ]);
+
+              $current_work_shift->from_date = $deletable_work_shift->from_date;
+              $current_work_shift->save();
+
+              return response()->json(["message" => "data deleted sussfully","date" => $deletable_work_shift], 200);
+
+             $deletable_work_shift->delete();
 
 
 
 
 
-            return response()->json(["message" => "data deleted sussfully", "deleted_ids" => $existingIds], 200);
+
+
+            return response()->json(["message" => "data deleted sussfully"], 200);
         } catch (Exception $e) {
 
             return $this->sendError($e, 500, $request);

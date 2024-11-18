@@ -1001,9 +1001,9 @@ Route::delete('/v1.0/work-shifts/{ids}', [WorkShiftController::class, "deleteWor
 
 
 
-    Route::delete('/v1.0/work-shift-histories/{ids}/{user_id}', [WorkShiftHistoryController::class, "deleteWorkShiftHistoriesByIds"]);
+    Route::delete('/v1.0/work-shift-histories/{id}/{user_id}', [WorkShiftHistoryController::class, "deleteWorkShiftHistoriesByIds"]);
 
-    
+
 
     // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     // end work shift  management section
