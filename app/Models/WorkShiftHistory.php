@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class WorkShiftHistory extends Model
 {
     use HasFactory;
+    protected $appends = ["attendance_exists"];
 
     protected $fillable = [
         'name',
@@ -16,7 +17,7 @@ class WorkShiftHistory extends Model
         "break_hours",
         'type',
         "description",
- 
+
         'is_business_default',
         'is_personal',
 
@@ -38,6 +39,15 @@ class WorkShiftHistory extends Model
 
     protected $dates = ['start_date',
     'end_date'];
+
+    public function getAttendanceExistsAttribute()
+    {
+       return Attendance::where([
+        "work_shift_history_id" => $this->id
+       ])
+       ->exists();
+
+    }
 
 
     public function details(){
