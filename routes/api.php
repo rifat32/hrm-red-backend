@@ -71,6 +71,7 @@ use App\Http\Controllers\UserSponsorshipHistoryController;
 use App\Http\Controllers\UserVisaHistoryController;
 use App\Http\Controllers\WorkLocationController;
 use App\Http\Controllers\WorkShiftController;
+use App\Http\Controllers\WorkShiftHistoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -994,6 +995,19 @@ Route::delete('/v1.0/work-shifts/{ids}', [WorkShiftController::class, "deleteWor
 // end work shift  management section
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+   // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // work shift  management section
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+    Route::delete('/v1.0/work-shift-histories/{ids}/{user_id}', [WorkShiftHistoryController::class, "deleteWorkShiftHistoriesByIds"]);
+
+    
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // end work shift  management section
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
