@@ -494,12 +494,12 @@ class WorkShiftController extends Controller
                     ;
 
 
-                  $attendance_exists =  Attendance::whereIn("work_shift_history_id",$work_shift_histories->pluck("id")->toArray())
+                    $attendance_exists = Attendance::whereIn("work_shift_history_id", $work_shift_histories->pluck("id")->toArray())
                     ->exists();
 
-                    if(!empty($attendance_exists)){
-                         throw new Exception("");
-                    }
+                if ($attendance_exists) {
+                    throw new Exception("Some attendances exist for this work shift. You cannot delete it. Please create a new one instead.",409);
+                }
 
 
 
