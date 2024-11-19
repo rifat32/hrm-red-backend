@@ -502,16 +502,16 @@ if(!$fields_changed){
                 ) {
 
 
-                    WorkShiftHistory::where([
-                        "to_date" => NULL
-                    ])
-                    ->where("work_shift_id",$work_shift_prev->id)
-                    // ->whereHas('users',function($query) use($work_shift_prev)  {
-                    //     $query->whereIn("users.id",$work_shift_prev->users()->pluck("users.id"));
-                    // })
-                    ->update([
-                        "to_date" => now()
-                    ]);
+                    // WorkShiftHistory::where([
+                    //     "to_date" => NULL
+                    // ])
+                    // ->where("work_shift_id",$work_shift_prev->id)
+                    // // ->whereHas('users',function($query) use($work_shift_prev)  {
+                    // //     $query->whereIn("users.id",$work_shift_prev->users()->pluck("users.id"));
+                    // // })
+                    // ->update([
+                    //     "to_date" => now()
+                    // ]);
 
                     $last_inactive_date = WorkShiftHistory::
                         where("work_shift_id",$work_shift->id)
