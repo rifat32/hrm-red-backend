@@ -124,14 +124,14 @@ class BusinessTimesController extends Controller
                     WorkShift::whereIn("id",$conflicted_work_shift_ids)->update([
                         "is_active" => 0
                     ]);
-                    WorkShiftHistory::where([
-                        "to_date" => NULL
-                    ])
-                    ->whereIn("work_shift_id",$conflicted_work_shift_ids)
+                    // WorkShiftHistory::where([
+                    //     "to_date" => NULL
+                    // ])
+                    // ->whereIn("work_shift_id",$conflicted_work_shift_ids)
 
-                    ->update([
-                        "to_date" => now()
-                    ]);
+                    // ->update([
+                    //     "to_date" => now()
+                    // ]);
                 }
 
 

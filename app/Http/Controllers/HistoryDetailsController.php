@@ -1674,9 +1674,9 @@ class HistoryDetailsController extends Controller
                      return $query->where('work_shift_histories.created_at', "<=", ($request->end_date . ' 23:59:59'));
                  })
                  ->when(!empty($request->order_by) && in_array(strtoupper($request->order_by), ['ASC', 'DESC']), function ($query) use ($request) {
-                     return $query->orderBy("work_shift_histories.id", $request->order_by);
+                     return $query->orderBy("work_shift_histories.from_date", $request->order_by);
                  }, function ($query) {
-                     return $query->orderBy("work_shift_histories.id", "DESC");
+                     return $query->orderBy("work_shift_histories.from_date", "DESC");
                  })
                  ->when(!empty($request->per_page), function ($query) use ($request) {
                      return $query->paginate($request->per_page);

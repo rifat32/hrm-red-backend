@@ -276,7 +276,7 @@ return "swagger generated";
             ['id' => 10, 'name' => 'Twitch', 'icon' => 'FaTwitch', 'link' => 'https://www.twitch.tv/'],
             ['id' => 11, 'name' => 'Stack Overflow', 'icon' => 'FaStackOverflow', 'link' => 'https://stackoverflow.com/'],
             ['id' => 12, 'name' => 'Slack', 'icon' => 'FaSlack', 'link' => 'https://slack.com/'],
-            ['id' => 13, 'name' => 'Other', 'icon' => 'FaGlobe', 'link' => ''], 
+            ['id' => 13, 'name' => 'Other', 'icon' => 'FaGlobe', 'link' => ''],
         ];
 
 

@@ -11,10 +11,13 @@ use App\Models\Business;
 use App\Models\DepartmentUser;
 use App\Models\EmailTemplate;
 use App\Models\EmailTemplateWrapper;
+use App\Models\EmployeeUserWorkShiftHistory;
 use App\Models\Project;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserWorkLocation;
+use App\Models\WorkShiftDetailHistory;
+use App\Models\WorkShiftHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -132,6 +135,210 @@ Route::get("/activate/{token}",function(Request $request,$token) {
     return view("dynamic-welcome-message",["html_content" => $html_final]);
 });
 
+
+Route::get("/run", function () {
+
+    $user_work_shift_histories =  EmployeeUserWorkShiftHistory::
+        orderByDesc("id")
+        ->get();
+    foreach ($user_work_shift_histories as $user_work_shift_history) {
+
+        $work_shift_history = WorkShiftHistory::where([
+            "id" => $user_work_shift_history->work_shift_id
+        ])
+        ->first();
+
+            echo json_encode($user_work_shift_history) . "<br>";
+            echo   "<br>";
+
+            echo json_encode($work_shift_history) . "<br>";
+            echo   "<br>";
+
+            if(empty($work_shift_history)) {
+                $user_work_shift_history->delete();
+                echo "empty work shift:";
+                echo   "<br>";
+                continue;
+            }
+
+            $user = User::where([
+                "id" => $user_work_shift_history->user_id
+            ])
+            ->first();
+            if(empty($user)) {
+                echo "empty user:";
+                echo   "<br>";
+                $user_work_shift_history->delete();
+                continue;
+            }
+
+
+
+
+        $new_work_shift_history_data = $work_shift_history->toArray();
+        $new_work_shift_history_data["user_id"] = $user_work_shift_history->user_id;
+        $new_work_shift_history_data["from_date"] = $user_work_shift_history->from_date;
+
+        $user_to_date = NULL;
+        if (!empty($user_work_shift_history->to_date)) {
+            $user_to_date = Carbon::parse($user_work_shift_history->to_date);
+        }
+
+        $history_to_date = NULL;
+        if (!empty($user_work_shift_history->to_date)) {
+            $history_to_date = Carbon::parse($work_shift_history->to_date);
+        }
+
+        $new_work_shift_history_data["to_date"] = NULL;
+        if (!empty($user_to_date) && !empty($history_to_date)) {
+            $new_work_shift_history_data["to_date"] = $user_to_date->min($history_to_date);
+        } else if (!empty($user_to_date)) {
+            $new_work_shift_history_data["to_date"] =  $user_to_date;
+        } else if (!empty($history_to_date)) {
+            $new_work_shift_history_data["to_date"] =  $history_to_date;
+        }
+
+      $work_shift_history_new =  WorkShiftHistory::create($new_work_shift_history_data);
+
+
+       $work_shift_details = WorkShiftDetailHistory::where([
+            "work_shift_id" => $work_shift_history["id"]
+        ])->get();
+
+        foreach($work_shift_details as $work_shift_detail) {
+            $work_shift_detail_data = $work_shift_detail->toArray();
+          $work_shift_detail_data["work_shift_id"] = $work_shift_history_new->id;
+          WorkShiftDetailHistory::create($work_shift_detail_data);
+
+        }
+
+        $user_work_shift_history->delete();
+
+
+    }
+
+
+    $work_shift_histories =  WorkShiftHistory::
+    orderBy("id")
+    ->get();
+
+
+
+    return "ok";
+});
+
+Route::get("/run-2", function () {
+
+    $work_shift_histories =  WorkShiftHistory::
+    orderBy("id")
+    ->get();
+
+    $passed_work_shift_ids = [];
+
+        foreach($work_shift_histories as $work_shift_history) {
+
+            $passed_work_shift_ids[] = $work_shift_history->id;
+            WorkShiftHistory::
+                whereNotIn("id",$passed_work_shift_ids)
+               ->where([
+           "user_id" => $work_shift_history->user_id,
+            ])
+            ->whereDate( "from_date", $work_shift_history->from_date)
+            ->whereDoesntHave("attendances")
+            ->delete();
+
+            $used_work_shift_history_of_the_same_day = WorkShiftHistory::
+                whereNotIn("id", $passed_work_shift_ids)
+                ->where([
+                "user_id" => $work_shift_history->user_id,
+                 ])
+                 ->whereDate( "from_date", $work_shift_history->from_date)
+                 ->whereHas("attendances")
+                 ->first();
+
+            if(empty($work_shift_history->attendance_exists)) {
+              if(!empty($used_work_shift_history_of_the_same_day)){
+                 $work_shift_history->delete();
+              }
+            }
+
+        }
+
+    return "ok";
+});
+
+Route::get("/run-3", function () {
+
+    $work_shift_histories =  WorkShiftHistory::
+    whereNull("to_date")
+    ->orderBy("id")
+    ->get();
+
+
+
+        foreach($work_shift_histories as $work_shift_history) {
+
+            $future_work_shift = WorkShiftHistory::where([
+                "user_id" => $work_shift_history->user_id
+            ])
+            ->whereDate("from_date",">", $work_shift_history->from_date)
+            ->orderBy("from_date")
+            ->first();
+
+            if (!empty($future_work_shift)) {
+                // Set to_date to the previous day of the future work shift's from_date
+                $work_shift_history->to_date = Carbon::parse($future_work_shift->from_date)->subDay();
+
+                // Save the changes
+                $work_shift_history->save();
+            }
+
+        }
+
+    return "ok";
+});
+
+
+
+Route::get("/run-v2-2", function () {
+
+    $work_shift_histories =  EmployeeUserWorkShiftHistory::
+    orderByDesc("id")
+    ->get();
+
+        $passed_work_shift_ids = [];
+
+        foreach($work_shift_histories as $work_shift_history) {
+
+            $passed_work_shift_ids[] = $work_shift_history->id;
+
+            EmployeeUserWorkShiftHistory::
+                whereNotIn("id",$passed_work_shift_ids)
+               ->where([
+           "user_id" => $work_shift_history->user_id,
+            ])
+            ->whereDate( "from_date", $work_shift_history->from_date)
+            ->whereDoesntHave("attendances")
+            ->delete();
+
+            $used_work_shift_history_of_the_same_day = EmployeeUserWorkShiftHistory::
+                whereNotIn("id", $passed_work_shift_ids)
+                ->where([
+                "user_id" => $work_shift_history->user_id,
+                 ])
+                 ->whereDate( "from_date", $work_shift_history->from_date)
+                 ->whereHas("attendances")
+                 ->first();
+
+            if(empty($work_shift_history->attendance_exists)) {
+              if(!empty($used_work_shift_history_of_the_same_day)){
+                 $work_shift_history->delete();
+              }
+            }
+        }
+
+    return "ok";
+});
 
 
 // Route::get("/test",function() {

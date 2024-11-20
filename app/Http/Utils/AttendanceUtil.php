@@ -47,18 +47,11 @@ trait AttendanceUtil
         $work_shift_history =  WorkShiftHistory::where(function ($query) use ($in_date, $user_id) {
                 $query->where("from_date", "<=", $in_date)
                     ->where(function ($query) use ($in_date) {
-                        $query->where("to_date", ">", $in_date)
+                        $query->where("to_date", ">=", $in_date)
                             ->orWhereNull("to_date");
                     })
 
-                    ->whereHas("users", function ($query) use ($in_date, $user_id) {
-                        $query->where("users.id", $user_id)
-                            ->where("employee_user_work_shift_histories.from_date", "<=", $in_date)
-                            ->where(function ($query) use ($in_date) {
-                                $query->where("employee_user_work_shift_histories.to_date", ">", $in_date)
-                                    ->orWhereNull("employee_user_work_shift_histories.to_date");
-                            });
-                    });
+                    ->where("user_id", $user_id);
             })
             // @@@ confusion
             ->orWhere(function ($query) {
@@ -91,18 +84,10 @@ trait AttendanceUtil
             ->where(function ($query) use ($start_date,$end_date, $user_id) {
                 $query->where("from_date", "<=", $end_date)
                     ->where(function ($query) use ($start_date) {
-                        $query->where("to_date", ">", $start_date)
+                        $query->where("to_date", ">=", $start_date)
                             ->orWhereNull("to_date");
                     })
-
-                    ->whereHas("users", function ($query) use ($start_date,$end_date, $user_id) {
-                        $query->where("users.id", $user_id)
-                            ->where("employee_user_work_shift_histories.from_date", "<=", $end_date)
-                            ->where(function ($query) use ($start_date) {
-                                $query->where("employee_user_work_shift_histories.to_date", ">", $start_date)
-                                    ->orWhereNull("employee_user_work_shift_histories.to_date");
-                            });
-                    });
+                    ->where("user_id", $user_id);
             })
             // @@@ confusion
 

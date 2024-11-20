@@ -148,10 +148,8 @@ class HolidayComponent {
                 // Determine the end date for the loop
 
 
-                $userShift = $work_shift->users->first(function ($user) use ($user_id) {
-                    return $user->id == $user_id;
-                });
-                $user_to_date = $userShift->pivot->to_date ?? null;
+               
+                $user_to_date = $work_shift->to_date ?? null;
 
                 if ($user_to_date) {
                     $end_date_loop = $user_to_date;
@@ -161,7 +159,7 @@ class HolidayComponent {
                     $end_date_loop = $end_date;
                 }
 
-                $user_from_date = $userShift->pivot->from_date;
+                $user_from_date = $work_shift->from_date;
                 $start_date_loop = Carbon::parse($user_from_date)->gt($start_date) ? $user_from_date : $start_date;
 
 

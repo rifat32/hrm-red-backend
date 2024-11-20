@@ -1001,7 +1001,20 @@ Route::delete('/v1.0/work-shifts/{ids}', [WorkShiftController::class, "deleteWor
 
 
 
-    Route::delete('/v1.0/work-shift-histories/{id}/{user_id}', [WorkShiftHistoryController::class, "deleteWorkShiftHistoriesByIds"]);
+          // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // work shift  management section
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    Route::put('/v1.0/work-shift-histories', [WorkShiftHistoryController::class, "updateWorkShiftHistory"]);
+
+    Route::get('/v1.0/work-shift-histories/{id}', [WorkShiftHistoryController::class, "getWorkShiftHistoryById"]);
+    Route::get('/v1.0/current-work-shift-history/{employee_id}', [WorkShiftHistoryController::class, "getCurrentWorkShiftHistory"]);
+
+    Route::delete('/v1.0/work-shift-histories/{ids}', [WorkShiftHistoryController::class, "deleteWorkShiftHistoriesByIds"]);
+
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    // end work shift  management section
+    // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
 

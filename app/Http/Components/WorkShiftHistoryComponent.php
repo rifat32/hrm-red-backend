@@ -15,27 +15,19 @@ class WorkShiftHistoryComponent
            where(function($query) use($in_date,$user_id) {
           $query ->where("from_date", "<=", $in_date)
           ->where(function ($query) use ($in_date) {
-              $query->where("to_date", ">", $in_date)
+              $query->where("to_date", ">=", $in_date)
                   ->orWhereNull("to_date");
           })
-
-          ->whereHas("users", function ($query) use ($in_date, $user_id) {
-              $query->where("users.id", $user_id)
-                  ->where("employee_user_work_shift_histories.from_date", "<=", $in_date)
-                  ->where(function ($query) use ($in_date) {
-                      $query->where("employee_user_work_shift_histories.to_date", ">", $in_date)
-                          ->orWhereNull("employee_user_work_shift_histories.to_date");
-                  });
-          });
+          ->where("user_id", $user_id);
             })
             // @@@confusion
-            ->orWhere(function($query) {
-               $query->where([
-                "business_id" => NULL,
-                "is_active" => 1,
-                "is_default" => 1
-               ]);
-            })
+            // ->orWhere(function($query) {
+            //    $query->where([
+            //     "business_id" => NULL,
+            //     "is_active" => 1,
+            //     "is_default" => 1
+            //    ]);
+            // })
             ->orderByDesc("work_shift_histories.id")
 
 
@@ -55,20 +47,16 @@ class WorkShiftHistoryComponent
     public function get_work_shift_histories($start_date,$end_date,$user_id,$throwError)
     {
      $work_shift_histories =   WorkShiftHistory::
-            where("from_date", "<=", $end_date)
+              with("details")
+            ->where("from_date", "<=", $end_date)
             ->where(function ($query) use ($start_date) {
-                $query->where("to_date", ">", $start_date)
+                $query->where("to_date", ">=", $start_date)
                     ->orWhereNull("to_date");
             })
-            ->whereHas("users", function ($query) use ($start_date, $user_id, $end_date) {
-                $query->where("users.id", $user_id)
-                    ->where("employee_user_work_shift_histories.from_date", "<", $end_date)
-                    ->where(function ($query) use ($start_date) {
-                        $query->where("employee_user_work_shift_histories.to_date", ">=", $start_date)
-                            ->orWhereNull("employee_user_work_shift_histories.to_date");
-                    });
-            })
+            ->where("user_id", $user_id)
 
+
+            ->orderByDesc("work_shift_histories.id")
             ->get();
 
         if ($work_shift_histories->isEmpty()) {
@@ -88,18 +76,13 @@ class WorkShiftHistoryComponent
      $work_shift_histories =   WorkShiftHistory::
             where("from_date", "<=", $end_date)
             ->where(function ($query) use ($start_date) {
-                $query->where("to_date", ">", $start_date)
+                $query->where("to_date", ">=", $start_date)
                     ->orWhereNull("to_date");
             })
-            ->whereHas("users", function ($query) use ($start_date, $user_id, $end_date) {
-                $query->where("users.id", $user_id)
-                    ->where("employee_user_work_shift_histories.from_date", "<", $end_date)
-                    ->where(function ($query) use ($start_date) {
-                        $query->where("employee_user_work_shift_histories.to_date", ">=", $start_date)
-                            ->orWhereNull("employee_user_work_shift_histories.to_date");
-                    });
-            })
+            ->where("user_id",$user_id)
+
  ->with("details")
+ ->orderByDesc("work_shift_histories.id")
             ->get();
 
         if ($work_shift_histories->isEmpty()) {
@@ -116,7 +99,7 @@ class WorkShiftHistoryComponent
 
 
 
-    public function get_work_shift_details($work_shift_history,$in_date)
+    public function get_work_shift_details($work_shift_history,$in_date,$thowError=true)
     {
         $day_number = Carbon::parse($in_date)->dayOfWeek;
         $work_shift_details =  $work_shift_history->details()->where([
@@ -124,8 +107,9 @@ class WorkShiftHistoryComponent
         ])
         ->first();
 
-        if (!$work_shift_details) {
-            throw new Exception(("No work shift details found  day " . $day_number), 400);
+
+        if (empty($work_shift_details) && $thowError) {
+            throw new Exception(("No work shift details found  day " . $day_number . " work shift id:" .  $work_shift_history->id), 400);
         }
         // if ($work_shift_details->is_weekend && !auth()->user()->hasRole("business_owner")) {
         //     throw new Exception(("there is a weekend on date " . $in_date), 400);
@@ -133,108 +117,84 @@ class WorkShiftHistoryComponent
         return $work_shift_details;
     }
 
-    public function updateWorkShiftsQuery($request,$all_manager_department_ids,$query) {
+    public function updateWorkShiftsQuery($all_manager_department_ids,$query) {
     $query = $query->when(!empty(auth()->user()->business_id), function ($query) use ( $all_manager_department_ids) {
         return $query
         ->where(function($query) use($all_manager_department_ids) {
-            $query
-            ->where([
-                "work_shifts.business_id" => auth()->user()->business_id
-            ])
-            ->whereHas("departments", function ($query) use ($all_manager_department_ids) {
-                $query->whereIn("departments.id", $all_manager_department_ids);
+          return  $query->where(function($query) use($all_manager_department_ids) {
+                $query
+                ->where([
+                    "work_shifts.business_id" => auth()->user()->business_id
+                ])
+                ->whereHas("departments", function ($query) use ($all_manager_department_ids) {
+                    $query->whereIn("departments.id", $all_manager_department_ids);
+                });
+
             });
 
-        })
+            // ->orWhere(function($query)  {
+            //     $query->where([
+            //         "is_active" => 1,
+            //         "business_id" => NULL,
+            //         "is_default" => 1
+            //     ]) ;
 
-        ->orWhere(function($query)  {
-            $query->where([
-                "is_active" => 1,
-                "business_id" => NULL,
-                "is_default" => 1
-            ])
-        //     ->whereHas('details', function($query) use($business_times) {
-
-        //     foreach($business_times as $business_time) {
-        //         $query->where([
-        //             "day" => $business_time->day,
-        //         ]);
-        //         if($business_time["is_weekend"]) {
-        //             $query->where([
-        //                 "is_weekend" => 1,
-        //             ]);
-        //         } else {
-        //             $query->where(function($query) use($business_time) {
-        //                 $query->whereTime("start_at", ">=", $business_time->start_at);
-        //                 $query->orWhereTime("end_at", "<=", $business_time->end_at);
-        //             });
-        //         }
-
-        //     }
-        // })
-        ;
-
+            // });
         });
+
     })
 
-    ->when(empty(auth()->user()->business_id), function ($query) use ($request) {
+    ->when(empty(auth()->user()->business_id), function ($query)  {
         return $query->where([
             "work_shifts.is_default" => 1,
             "work_shifts.business_id" => NULL
         ]);
     })
-        ->when(!empty($request->search_key), function ($query) use ($request) {
-            return $query->where(function ($query) use ($request) {
-                $term = $request->search_key;
+        ->when(!empty(request()->search_key), function ($query) {
+            return $query->where(function ($query) {
+                $term = request()->search_key;
                 $query->where("work_shifts.name", "like", "%" . $term . "%")
                     ->orWhere("work_shifts.description", "like", "%" . $term . "%");
             });
         })
 
 
-
-
-
-        ->when(isset($request->name), function ($query) use ($request) {
-            $term = $request->name;
+        ->when(!empty(request()->name), function ($query)  {
+            $term = request()->name;
             return $query->where("work_shifts.name", "like", "%" . $term . "%");
         })
-        ->when(isset($request->description), function ($query) use ($request) {
-            $term = $request->description;
+        ->when(!empty(request()->description), function ($query)  {
+            $term = request()->description;
             return $query->where("work_shifts.description", "like", "%" . $term . "%");
         })
 
-        ->when(isset($request->type), function ($query) use ($request) {
-            return $query->where('work_shifts.type', ($request->type));
+        ->when(!empty(request()->type), function ($query)  {
+            return $query->where('work_shifts.type', request()->type);
         })
 
+        ->when(request()->filled("is_active"), function ($query)  {
+            return $query->where('work_shifts.is_active', request()->boolean("is_active"));
+         })
 
 
-
-
-
-        ->when(isset($request->is_personal), function ($query) use ($request) {
-            return $query->where('work_shifts.is_personal', intval($request->is_personal));
+        ->when(request()->filled("is_personal"), function ($query)  {
+            return $query->where('work_shifts.is_personal', request()->boolean("is_personal"));
         })
-        ->when(!isset($request->is_personal), function ($query) use ($request) {
+        ->when(!isset(request()->is_personal), function ($query)  {
             return $query->where('work_shifts.is_personal', 0);
         })
-
-
-        ->when(isset($request->is_default), function ($query) use ($request) {
-            return $query->where('work_shifts.is_default', intval($request->is_personal));
+        ->when(request()->filled("is_default"), function ($query)  {
+            return $query->where('work_shifts.is_default', request()->boolean("is_default"));
         })
-
-
-        //    ->when(!empty($request->product_category_id), function ($query) use ($request) {
-        //        return $query->where('product_category_id', $request->product_category_id);
+        //    ->when(!empty(request()->product_category_id), function ($query)  {
+        //        return $query->where('product_category_id', request()->product_category_id);
         //    })
-        ->when(!empty($request->start_date), function ($query) use ($request) {
-            return $query->where('work_shifts.created_at', ">=", $request->start_date);
+        ->when(!empty(request()->start_date), function ($query)  {
+            return $query->where('work_shifts.created_at', ">=", request()->start_date);
         })
 
-        ->when(!empty($request->end_date), function ($query) use ($request) {
-            return $query->where('work_shifts.created_at', "<=", ($request->end_date . ' 23:59:59'));
+        ->when(!empty(request()->end_date), function ($query)  {
+            return $query->where('work_shifts.created_at', "<=", (request()->end_date . ' 23:59:59'));
         });
         return $query;
     }
@@ -244,8 +204,8 @@ class WorkShiftHistoryComponent
 
 
     public function getWorkShiftByUserId ($user_id) {
-        $work_shift =   WorkShift::with("details")
 
+        $work_shift =   WorkShift::with("details")
         ->where(function($query) use($user_id) {
             $query->where([
                 "business_id" => auth()->user()->business_id
@@ -253,25 +213,99 @@ class WorkShiftHistoryComponent
                 $query->where('users.id', $user_id);
             });
         })
-        ->orWhere(function($query) {
-            $query->where([
-                "is_active" => 1,
-                "business_id" => NULL,
-                "is_default" => 1
-            ]);
+        // ->orWhere(function($query) {
+        //     $query->where([
+        //         "is_active" => 1,
+        //         "business_id" => NULL,
+        //         "is_default" => 1
+        //     ]);
 
-        })
+        // })
 
         ->first();
 
          if (empty($work_shift)) {
             throw new Exception("no work shift found for the user",404);
          }
-
          return $work_shift;
-
     }
 
+
+    public function getWorkShiftById($work_shift_id) {
+      $work_shift =  WorkShift::where([
+            "id" => $work_shift_id,
+        ])
+            ->where(function ($query) {
+                $query->where([
+
+                    "business_id" => auth()->user()->business_id
+                ]);
+            })
+            ->orderByDesc("id")
+            ->first();
+
+        if (empty($work_shift)) {
+            throw new Exception("no work shift found", 403);
+        }
+
+        if (empty($work_shift->is_active)) {
+            throw new Exception("Please activate the work shift named '" . $work_shift->name . "'", 400);
+        }
+
+        return $work_shift;
+    }
+
+    public function getCurrentOverlappingWorkShift($user_id, $from_date,$history_id=NULL) {
+        $overlapped_work_shift_history =  WorkShiftHistory::
+            when(!empty($history_id), function($query) use($history_id) {
+                $query->whereNotIn("id",[$history_id]);
+            })
+            ->where("from_date", "=", $from_date )
+            ->where("user_id",$user_id)
+            ->first();
+        return $overlapped_work_shift_history;
+    }
+
+    public function getFutureWorkShift($user_id, $from_date,$history_id=NULL) {
+        $future_work_shift_history =  WorkShiftHistory::
+            when(!empty($history_id), function($query) use($history_id) {
+                $query->whereNotIn("id",[$history_id]);
+            })
+            ->where("from_date", ">", $from_date )
+        ->where("user_id",$user_id)
+        ->orderByDesc("from_date")
+        ->first();
+
+        return $future_work_shift_history;
+    }
+    public function getPastWorkShift($user_id, $from_date,$history_id=NULL) {
+        $future_work_shift_history =  WorkShiftHistory::
+            when(!empty($history_id), function($query) use($history_id) {
+                $query->whereNotIn("id",[$history_id]);
+            })
+            ->where("to_date", "<", $from_date )
+        ->where("user_id",$user_id)
+        ->orderByDesc("from_date")
+        ->first();
+
+        return $future_work_shift_history;
+    }
+
+    public function getInnerWorkShift($user_id, $from_date,$history_id=NULL) {
+        $future_work_shift_history =  WorkShiftHistory::
+            when(!empty($history_id), function($query) use($history_id) {
+                $query->whereNotIn("id",[$history_id]);
+            })
+           ->whereDate("from_date", "<=", $from_date)
+        ->where(function ($query) use ($from_date) {
+            $query->whereDate("to_date", ">=", $from_date)
+                ->orWhereNull("to_date");
+        })
+        ->where("user_id",$user_id)
+        ->first();
+
+        return $future_work_shift_history;
+    }
 
 
 }

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class WorkShiftHistory extends Model
 {
     use HasFactory;
-    protected $appends = ["attendance_exists"];
+    protected $appends = ['is_current',"attendance_exists"];
 
     protected $fillable = [
         'name',
@@ -47,6 +47,15 @@ class WorkShiftHistory extends Model
        ])
        ->exists();
 
+    }
+    public function getIsCurrentAttribute()
+    {
+
+        $today = Carbon::today();
+        $from_date = Carbon::parse($this->from_date);
+        $to_date = Carbon::parse($this->to_date);
+
+        return $today->between($from_date, $to_date);
     }
 
 

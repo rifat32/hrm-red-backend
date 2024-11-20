@@ -614,8 +614,8 @@ class BusinessController extends Controller
                     Mail::to($request_data['user']['email'])->send(new SendPassword($user, $password));
 
                     $this->storeEmailSender($user->id,0);
-                    
-              
+
+
 
                 }
 
@@ -1249,13 +1249,13 @@ class BusinessController extends Controller
                             "is_active" => 0
                         ]);
 
-                        WorkShiftHistory::where([
-                            "to_date" => NULL
-                        ])
-                            ->whereIn("work_shift_id", $conflicted_work_shift_ids)
-                            ->update([
-                                "to_date" => now()
-                            ]);
+                        // WorkShiftHistory::where([
+                        //     "to_date" => NULL
+                        // ])
+                        //     ->whereIn("work_shift_id", $conflicted_work_shift_ids)
+                        //     ->update([
+                        //         "to_date" => now()
+                        //     ]);
                     }
 
 
@@ -1805,13 +1805,13 @@ class BusinessController extends Controller
                             "is_active" => 0
                         ]);
 
-                        WorkShiftHistory::where([
-                            "to_date" => NULL
-                        ])
-                            ->whereIn("work_shift_id", $conflicted_work_shift_ids)
-                            ->update([
-                                "to_date" => now()
-                            ]);
+                        // WorkShiftHistory::where([
+                        //     "to_date" => NULL
+                        // ])
+                        //     ->whereIn("work_shift_id", $conflicted_work_shift_ids)
+                        //     ->update([
+                        //         "to_date" => now()
+                        //     ]);
                     }
 
 
