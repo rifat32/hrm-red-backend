@@ -33,6 +33,7 @@ class WorkShiftHistory extends Model
         "from_date",
         "to_date",
         "work_shift_id",
+        "user_id"
 
 
     ];
@@ -57,7 +58,9 @@ class WorkShiftHistory extends Model
 
         return $today->between($from_date, $to_date);
     }
-
+    public function attendances(){
+        return $this->hasMany(Attendance::class,'work_shift_history_id', 'id');
+    }
 
     public function details(){
         return $this->hasMany(WorkShiftDetailHistory::class,'work_shift_id', 'id');
@@ -65,6 +68,9 @@ class WorkShiftHistory extends Model
 
     public function departments() {
         return $this->belongsToMany(Department::class, 'employee_department_work_shift_histories', 'work_shift_id', 'department_id');
+    }
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
 

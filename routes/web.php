@@ -154,21 +154,24 @@ Route::get("/run", function () {
             echo json_encode($work_shift_history) . "<br>";
             echo   "<br>";
 
-            if(empty($work_shift_history)) {
-                $user_work_shift_history->delete();
-                echo "empty work shift:";
-                echo   "<br>";
-                continue;
-            }
+
 
             $user = User::where([
                 "id" => $user_work_shift_history->user_id
             ])
             ->first();
+
             if(empty($user)) {
                 echo "empty user:";
                 echo   "<br>";
                 $user_work_shift_history->delete();
+                continue;
+            }
+
+            if(empty($work_shift_history)) {
+                $user_work_shift_history->delete();
+                echo "empty work shift:";
+                echo   "<br>";
                 continue;
             }
 
@@ -214,13 +217,17 @@ Route::get("/run", function () {
 
         $user_work_shift_history->delete();
 
+        echo   "<br>";
+        echo   "new work shift created";
+        echo json_encode($work_shift_history_new) . "<br>";
+         echo   "<br>";
+
+
 
     }
 
 
-    $work_shift_histories =  WorkShiftHistory::
-    orderBy("id")
-    ->get();
+
 
 
 

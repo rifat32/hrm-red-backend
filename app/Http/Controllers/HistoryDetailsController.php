@@ -1625,33 +1625,17 @@ class HistoryDetailsController extends Controller
              $employee_work_shift_history = WorkShiftHistory::
                 with([
                   "details",
-                  "user_work_shift" => function($query) use($request) {
-                    $query->when(empty($request->user_id), function ($query) use ($request) {
-                           $query->where('employee_user_work_shift_histories.user_id', auth()->user()->id);
-                   })
-                   ->when(!empty($request->user_id), function ($query) use ($request) {
-                        $query->where('employee_user_work_shift_histories.user_id', $request->user_id);
-               }) ;
 
-
-
-
-
-                  }
                 ])
+                  ->whereHas("user.department_user.department", function($query) use($all_manager_department_ids) {
+                $query->whereIn("departments.id",$all_manager_department_ids);
+             })
 
                 ->when(!empty($request->user_id), function ($query) use ($request) {
-
-                 $query->whereHas('users',function($query) use($request) {
-                     $query->where('employee_user_work_shift_histories.user_id', $request->user_id);
-                });
-
-
+                 $query->where('user_id',$request->user_id);
             })
             ->when(empty($request->user_id), function ($query) use ($request) {
-                 $query->whereHas('users',function($query) use($request) {
-                    $query->where('employee_user_work_shift_histories.user_id', auth()->user()->id);
-               });
+                $query->where('user_id',auth()->user()->id);
             })
             // ->whereHas("users.department_user.department", function($query) use($all_manager_department_ids) {
             //     $query->whereIn("departments.id",$all_manager_department_ids);

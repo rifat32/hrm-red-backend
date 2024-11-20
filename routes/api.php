@@ -988,6 +988,7 @@ Route::get('/v2.0/work-shifts', [WorkShiftController::class, "getWorkShiftsV2"])
 Route::get('/v1.0/work-shifts/{id}', [WorkShiftController::class, "getWorkShiftById"]);
 
 Route::get('/v1.0/work-shifts/get-by-user-id/{user_id}', [WorkShiftController::class, "getWorkShiftByUserId"]);
+Route::get('/v2.0/work-shifts/get-by-user-id/{user_id}', [WorkShiftController::class, "getWorkShiftByUserIdV2"]);
 
 Route::delete('/v1.0/work-shifts/{ids}', [WorkShiftController::class, "deleteWorkShiftsByIds"]);
 

@@ -1862,7 +1862,110 @@ class WorkShiftController extends Controller
              return $this->sendError($e, 500, $request);
          }
      }
+/**
+     *
+     * @OA\Get(
+     *      path="/v2.0/work-shifts/get-by-user-id/{user_id}",
+     *      operationId="getWorkShiftByUserIdV2",
+     *      tags={"administrator.work_shift"},
+     *       security={
+     *           {"bearerAuth": {}}
+     *       },
+     *              @OA\Parameter(
+     *         name="user_id",
+     *         in="path",
+     *         description="user_id",
+     *         required=true,
+     *  example="6"
+     *      ),
+     *      summary="This method is to get work shift by user id",
+     *      description="This method is to get work shift by user id",
+     *
 
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       @OA\JsonContent(),
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     * @OA\JsonContent(),
+     *      ),
+     *        @OA\Response(
+     *          response=422,
+     *          description="Unprocesseble Content",
+     *    @OA\JsonContent(),
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden",
+     *   @OA\JsonContent()
+     * ),
+     *  * @OA\Response(
+     *      response=400,
+     *      description="Bad Request",
+     *   *@OA\JsonContent()
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found",
+     *   *@OA\JsonContent()
+     *   )
+     *      )
+     *     )
+     */
+
+
+     public function getWorkShiftByUserIdV2($user_id, Request $request)
+     {
+
+         try {
+             $this->storeActivity($request, "DUMMY activity", "DUMMY description");
+
+             $user_id = intval($user_id);
+             $request_user_id = auth()->user()->id;
+
+             $hasPermission = auth()->user()->hasPermissionTo('work_shift_view');
+
+             if ((!$hasPermission && ($request_user_id !== $user_id))) {
+                 return response()->json([
+                     "message" => "You can not perform this action"
+                 ], 401);
+             }
+
+             $start_date = request()->input("start_date");
+             $end_date = request()->input("end_date");
+
+             if(empty($start_date) || empty($end_date)) {
+                 return response()->json([
+                     "message" => "start date and end date is required"
+                 ],400);
+             }
+
+
+             $all_manager_department_ids = $this->get_all_departments_of_manager();
+
+             $this->validateUserQuery($user_id, $all_manager_department_ids);
+
+
+             //  $business_times =    BusinessTime::where([
+             //     "is_weekend" => 1,
+             //     "business_id" => auth()->user()->business_id,
+             // ])->get();
+
+
+             $work_shift =   $this->workShiftHistoryComponent->get_work_shift_histories($start_date,$end_date,$user_id,true);
+
+
+
+             return response()->json($work_shift, 200);
+         } catch (Exception $e) {
+
+             return $this->sendError($e, 500, $request);
+         }
+     }
+ 
     /**
      *
      * @OA\Get(
