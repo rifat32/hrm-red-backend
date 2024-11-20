@@ -18,7 +18,7 @@ use App\Models\WorkShiftHistory;
 use App\Models\User;
 
 use App\Models\WorkShift;
-
+use App\Models\WorkShiftDetailHistory;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -493,7 +493,6 @@ class WorkShiftController extends Controller
                     ->get()
                     ;
 
-
                     $attendance_exists = Attendance::whereIn("work_shift_history_id", $work_shift_histories->pluck("id")->toArray())
                     ->exists();
 
@@ -502,6 +501,38 @@ class WorkShiftController extends Controller
                 }
 
 
+                $work_shift_histories = WorkShiftHistory::where([
+                    "work_shift_id" => $work_shift->id
+                ])
+                ->get();
+                foreach($work_shift_histories as $work_shift_history) {
+
+    // Copy all attributes from work_shift to work_shift_history
+    foreach ($work_shift->getAttributes() as $key => $value) {
+        if ($key !== 'id' && $key !== 'from_date' && $key !== 'to_date') { // Exclude 'id' to prevent overwriting primary key
+            $work_shift_history->$key = $value;
+        }
+    }
+
+    // Set any additional fields if needed
+    $work_shift_history->work_shift_id = $work_shift->id; // Maintain reference
+
+    // Save the new WorkShiftHistory instance
+    $work_shift_history->save();
+
+    $work_shift_history->details()->delete();
+
+    foreach($work_shift_history->details as $work_shift_detail) {
+        $work_shift_detail_data = $work_shift_detail->toArray();
+      $work_shift_detail_data["work_shift_id"] = $work_shift_history->id;
+      WorkShiftDetailHistory::create($work_shift_detail_data);
+
+    }
+
+                }
+
+
+                return response($work_shift, 201);
 
 
                     // WorkShiftHistory::where([
