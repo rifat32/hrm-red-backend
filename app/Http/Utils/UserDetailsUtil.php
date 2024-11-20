@@ -637,10 +637,98 @@ if(!empty($joining_date)) {
 
 
 
+public function store_work_shift_history($work_shift_id, $user)
+{
+
+        $work_shift =  WorkShift::where([
+            "id" => $work_shift_id,
+        ])
+            ->first();
+        if (!$work_shift) {
+            throw new Exception("Work shift validation failed");
+        }
+        if (!$work_shift->is_active) {
+
+            throw new Exception(("Please activate the work shift named '" . $work_shift->name . "'"), 400);
+
+            // return response()->json(["message" => ("Please activate the work shift named '" . $work_shift->name . "'")], 400);
+        }
+        $work_shift->users()->attach($user->id);
+
+
+
+        $work_shift_history_data = $work_shift->toArray();
+        $work_shift_history_data["work_shift_id"] = $work_shift_history_data["id"];
+        // $employee_work_shift_history_data["from_date"] = $request_data["start_date"]?$request_data["start_date"]:now();
+        $work_shift_history_data["from_date"] = auth()->user()->business->start_date;
+        $work_shift_history_data["to_date"] = NULL;
+        $work_shift_history_data["user_id"] =  $user->id;
 
 
 
 
+        $work_shift_history =  WorkShiftHistory::create($work_shift_history_data);
+
+
+        foreach ($work_shift->details as $details) {
+            $details_data = $details->toArray();
+            $details_data["work_shift_id"] = $work_shift_history_data["work_shift_id"];
+            $work_shift_history->details()->create($details_data);
+        }
+
+}
+
+
+
+
+public function update_work_shift_history($work_shift_id, $user)
+{
+
+        $work_shift =  WorkShift::where([
+            "id" => $work_shift_id,
+        ])
+            ->first();
+        if (!$work_shift) {
+            throw new Exception("Work shift validation failed");
+        }
+        if (!$work_shift->is_active) {
+
+            throw new Exception(("Please activate the work shift named '" . $work_shift->name . "'"), 400);
+
+            // return response()->json(["message" => ("Please activate the work shift named '" . $work_shift->name . "'")], 400);
+        }
+        $work_shift->users()->attach($user->id);
+
+
+
+        $work_shift_history_data = $work_shift->toArray();
+        $work_shift_history_data["work_shift_id"] = $work_shift_history_data["id"];
+        // $employee_work_shift_history_data["from_date"] = $request_data["start_date"]?$request_data["start_date"]:now();
+        $work_shift_history_data["from_date"] = today()->addDay(1);
+        $work_shift_history_data["to_date"] = NULL;
+        $work_shift_history_data["user_id"] =  $user->id;
+
+
+        WorkShiftHistory::where([
+            "user_id" => $user->id
+        ])
+        ->whereDate("from_date","<",today())
+        ->whereNull("to_date")
+        ->update([
+            "to_date" =>today()
+        ]);
+
+
+        $work_shift_history =  WorkShiftHistory::create($work_shift_history_data);
+
+
+        foreach ($work_shift->details as $details) {
+            $details_data = $details->toArray();
+            $details_data["work_shift_id"] = $work_shift_history_data["work_shift_id"];
+            $work_shift_history->details()->create($details_data);
+        }
+
+}
 
 
 }

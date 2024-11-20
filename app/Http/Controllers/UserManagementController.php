@@ -558,8 +558,14 @@ class UserManagementController extends Controller
             $user->assignRole($request_data['role']);
 
 
-            $this->store_work_shift($request_data, $user);
+            if(!empty($request_data["work_shift_id"])) {
+                $this->store_work_shift_history($request_data["work_shift_id"], $user);
+            }
+
+
+
             $this->store_project($request_data, $user);
+
             $this->store_pension($request_data, $user);
             $this->store_recruitment_processes($request_data, $user);
 
@@ -1302,7 +1308,11 @@ class UserManagementController extends Controller
 
             $user->syncRoles([$request_data['role']]);
 
-            $this->update_work_shift($request_data, $user);
+             if(!empty($request_data["work_shift_id"])) {
+                $this->update_work_shift_history($request_data["work_shift_id"], $user);
+            }
+
+
             $this->update_address_history($request_data, $user);
             $this->update_recruitment_processes($request_data, $user);
 
