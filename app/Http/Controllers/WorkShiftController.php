@@ -1990,7 +1990,7 @@ class WorkShiftController extends Controller
 
 
             // Create date range between start and end dates
-            $date_range = $start_date->daysUntil($end_date->addDay());
+            $date_range = $start_date->daysUntil($end_date);
 
 
             $dates = [];
