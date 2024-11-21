@@ -192,7 +192,7 @@ class WorkShiftController extends Controller
                     if (!$check_work_shift_details["ok"]) {
                         throw new Exception(json_encode($check_work_shift_details["error"]), $check_work_shift_details["status"]);
                     }
-                } else if($request_data["type"] == "flexible") {
+                } else if ($request_data["type"] == "flexible") {
                     $this->isModuleEnabled("flexible_shifts");
                 }
 
@@ -248,7 +248,7 @@ class WorkShiftController extends Controller
             return $this->sendError($e, 500, $request);
         }
     }
-   /**
+    /**
      *
      * @OA\Put(
      *      path="/v1.0/work-shifts-check",
@@ -577,37 +577,37 @@ class WorkShiftController extends Controller
                     foreach ($work_shift_histories_before as $work_shift_history_before) {
                         $affected_user_ids[] = $work_shift_history_before->user_id;
 
-        //                 $request_data["from_date"] = today();
-        //                 $request_data["to_date"] = $work_shift_history_before->to_date;
-        //                 $request_data["work_shift_id"] = $work_shift->id;
-        //                 $request_data["user_id"] = $work_shift_history_before->user_id;
+                        //                 $request_data["from_date"] = today();
+                        //                 $request_data["to_date"] = $work_shift_history_before->to_date;
+                        //                 $request_data["work_shift_id"] = $work_shift->id;
+                        //                 $request_data["user_id"] = $work_shift_history_before->user_id;
 
-        //                 $work_shift_history_current =  WorkShiftHistory::create(collect($request_data)->only([
-        //                    'name',
-        // "break_type",
-        // "break_hours",
-        // 'type',
-        // "description",
+                        //                 $work_shift_history_current =  WorkShiftHistory::create(collect($request_data)->only([
+                        //                    'name',
+                        // "break_type",
+                        // "break_hours",
+                        // 'type',
+                        // "description",
 
-        // 'is_business_default',
-        // 'is_personal',
+                        // 'is_business_default',
+                        // 'is_personal',
 
-        // "is_default",
-        // "is_active",
-        // "business_id",
-        // "created_by",
+                        // "is_default",
+                        // "is_active",
+                        // "business_id",
+                        // "created_by",
 
-        // "from_date",
-        // "to_date",
-        // "work_shift_id",
-        // "user_id",
+                        // "from_date",
+                        // "to_date",
+                        // "work_shift_id",
+                        // "user_id",
 
-        //                 ])->toArray());
+                        //                 ])->toArray());
 
-        //                 $work_shift_history_current->details()->createMany($request_data['details']);
+                        //                 $work_shift_history_current->details()->createMany($request_data['details']);
 
-        //                 $work_shift_history_before->to_date = today();
-        //                 $work_shift_history_before->save();
+                        //                 $work_shift_history_before->to_date = today();
+                        //                 $work_shift_history_before->save();
                     }
                 }
 
@@ -772,7 +772,7 @@ class WorkShiftController extends Controller
 
                         throw new Exception(json_encode($check_work_shift_details["error"]), $check_work_shift_details["status"]);
                     }
-                } else if($request_data["type"] == "flexible") {
+                } else if ($request_data["type"] == "flexible") {
                     $this->isModuleEnabled("flexible_shifts");
                 }
 
@@ -875,20 +875,17 @@ class WorkShiftController extends Controller
                 $work_shift_histories = WorkShiftHistory::where([
                     "work_shift_id" => $work_shift->id
                 ])
-                ->get()
-                ;
+                    ->get();
 
                 if (
                     $fields_changed
                 ) {
                     $attendance_exists = Attendance::whereIn("work_shift_history_id", $work_shift_histories->pluck("id")->toArray())
-                    ->exists();
+                        ->exists();
 
-                if ($attendance_exists) {
-                    throw new Exception("Some attendances exist for this work shift. You cannot delete it. Please create a new one instead.",409);
-                }
-
-
+                    if ($attendance_exists) {
+                        throw new Exception("Some attendances exist for this work shift. You cannot delete it. Please create a new one instead.", 409);
+                    }
                 }
 
 
@@ -933,6 +930,7 @@ class WorkShiftController extends Controller
                         $pivot_data = collect($user_ids)->mapWithKeys(function ($user_id) {
                             return [$user_id => ['from_date' => now(), 'to_date' => null]];
                         });
+
                         $employee_work_shift_history->users()->sync($pivot_data);
                     }
                 }
@@ -997,12 +995,12 @@ class WorkShiftController extends Controller
                         $request_data["to_date"] = $work_shift_history_before->to_date;
 
                         $attendance_exists = Attendance::where([
-                           "work_shift_history_id" => $work_shift_history_before->id
+                            "work_shift_history_id" => $work_shift_history_before->id
                         ])
-                        ->exists();
+                            ->exists();
 
 
-                        if(!empty($attendance_exists)) {
+                        if (!empty($attendance_exists)) {
                             $work_shift_history_before->to_date = Carbon::yesterday();
                             $work_shift_history_before->save();
                             $request_data["from_date"] = today();
@@ -1013,31 +1011,29 @@ class WorkShiftController extends Controller
 
 
 
-                                        $work_shift_history_current =  WorkShiftHistory::create(collect($request_data)->only([
-                                           'name',
-                        "break_type",
-                        "break_hours",
-                        'type',
-                        "description",
+                        $work_shift_history_current =  WorkShiftHistory::create(collect($request_data)->only([
+                            'name',
+                            "break_type",
+                            "break_hours",
+                            'type',
+                            "description",
 
-                        'is_business_default',
-                        'is_personal',
+                            'is_business_default',
+                            'is_personal',
 
-                        "is_default",
-                        "is_active",
-                        "business_id",
-                        "created_by",
+                            "is_default",
+                            "is_active",
+                            "business_id",
+                            "created_by",
 
-                        "from_date",
-                        "to_date",
-                        "work_shift_id",
-                        "user_id",
+                            "from_date",
+                            "to_date",
+                            "work_shift_id",
+                            "user_id",
 
-                                        ])->toArray());
+                        ])->toArray());
 
-                                        $work_shift_history_current->details()->createMany($request_data['details']);
-
-
+                        $work_shift_history_current->details()->createMany($request_data['details']);
                     }
                 }
 
@@ -1049,11 +1045,7 @@ class WorkShiftController extends Controller
                     ->select("id", "first_Name", "middle_Name", "last_name")
                     ->get();
 
-                    return response($work_shift, 201);
-
-
-
-
+                return response($work_shift, 201);
             });
         } catch (Exception $e) {
             error_log($e->getMessage());
@@ -1240,13 +1232,6 @@ class WorkShiftController extends Controller
                         ]);
                 }
             }
-
-
-
-
-
-
-
         } catch (Exception $e) {
             error_log($e->getMessage());
             return $this->sendError($e, 500, $request);
@@ -1822,47 +1807,60 @@ class WorkShiftController extends Controller
      */
 
 
-     public function getWorkShiftByUserId($user_id, Request $request)
-     {
+    public function getWorkShiftByUserId($user_id, Request $request)
+    {
 
-         try {
-             $this->storeActivity($request, "DUMMY activity", "DUMMY description");
+        try {
+            $this->storeActivity($request, "DUMMY activity", "DUMMY description");
 
-             $user_id = intval($user_id);
-             $request_user_id = auth()->user()->id;
+            $user_id = intval($user_id);
+            $request_user_id = auth()->user()->id;
 
-             $hasPermission = auth()->user()->hasPermissionTo('work_shift_view');
+            $hasPermission = auth()->user()->hasPermissionTo('work_shift_view');
 
-             if ((!$hasPermission && ($request_user_id !== $user_id))) {
-                 return response()->json([
-                     "message" => "You can not perform this action"
-                 ], 401);
-             }
-
-
-
-             $all_manager_department_ids = $this->get_all_departments_of_manager();
-
-             $this->validateUserQuery($user_id, $all_manager_department_ids);
-
-
-             //  $business_times =    BusinessTime::where([
-             //     "is_weekend" => 1,
-             //     "business_id" => auth()->user()->business_id,
-             // ])->get();
-
-
-             $work_shift =   $this->workShiftHistoryComponent->getWorkShiftByUserId($user_id);
+            if ((!$hasPermission && ($request_user_id !== $user_id))) {
+                return response()->json([
+                    "message" => "You can not perform this action"
+                ], 401);
+            }
 
 
 
-             return response()->json($work_shift, 200);
-         } catch (Exception $e) {
+            $all_manager_department_ids = $this->get_all_departments_of_manager();
 
-             return $this->sendError($e, 500, $request);
-         }
-     }
-/**
+            $this->validateUserQuery($user_id, $all_manager_department_ids);
+
+
+            //  $business_times =    BusinessTime::where([
+            //     "is_weekend" => 1,
+            //     "business_id" => auth()->user()->business_id,
+            // ])->get();
+
+
+            $work_shift =   $this->workShiftHistoryComponent->getWorkShiftByUserId($user_id);
+
+
+
+            return response()->json($work_shift, 200);
+        } catch (Exception $e) {
+
+            return $this->sendError($e, 500, $request);
+        }
+    }
+
+    public function get_work_shift_detailsV3($work_shift_history, $in_date)
+    {
+        $day_number = Carbon::parse($in_date)->dayOfWeek;
+
+        $work_shift_details = $work_shift_history->details->first(function ($detail) use ($day_number) {
+            return $detail->day == $day_number;
+        });
+
+
+        return $work_shift_details;
+    }
+
+    /**
      *
      * @OA\Get(
      *      path="/v2.0/work-shifts/get-by-user-id/{user_id}",
@@ -1878,107 +1876,17 @@ class WorkShiftController extends Controller
      *         required=true,
      *  example="6"
      *      ),
-     *      summary="This method is to get work shift by user id",
-     *      description="This method is to get work shift by user id",
-     *
-
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *       @OA\JsonContent(),
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     * @OA\JsonContent(),
+     *  *              @OA\Parameter(
+     *         name="start_date",
+     *         in="query",
+     *         description="start_date",
+     *         required=true,
+     *  example="6"
      *      ),
-     *        @OA\Response(
-     *          response=422,
-     *          description="Unprocesseble Content",
-     *    @OA\JsonContent(),
-     *      ),
-     *      @OA\Response(
-     *          response=403,
-     *          description="Forbidden",
-     *   @OA\JsonContent()
-     * ),
-     *  * @OA\Response(
-     *      response=400,
-     *      description="Bad Request",
-     *   *@OA\JsonContent()
-     *   ),
-     * @OA\Response(
-     *      response=404,
-     *      description="not found",
-     *   *@OA\JsonContent()
-     *   )
-     *      )
-     *     )
-     */
-
-
-     public function getWorkShiftByUserIdV2($user_id, Request $request)
-     {
-
-         try {
-             $this->storeActivity($request, "DUMMY activity", "DUMMY description");
-
-             $user_id = intval($user_id);
-             $request_user_id = auth()->user()->id;
-
-             $hasPermission = auth()->user()->hasPermissionTo('work_shift_view');
-
-             if ((!$hasPermission && ($request_user_id !== $user_id))) {
-                 return response()->json([
-                     "message" => "You can not perform this action"
-                 ], 401);
-             }
-
-             $start_date = request()->input("start_date");
-             $end_date = request()->input("end_date");
-
-             if(empty($start_date) || empty($end_date)) {
-                 return response()->json([
-                     "message" => "start date and end date is required"
-                 ],400);
-             }
-
-
-             $all_manager_department_ids = $this->get_all_departments_of_manager();
-
-             $this->validateUserQuery($user_id, $all_manager_department_ids);
-
-
-             //  $business_times =    BusinessTime::where([
-             //     "is_weekend" => 1,
-             //     "business_id" => auth()->user()->business_id,
-             // ])->get();
-
-
-             $work_shift =   $this->workShiftHistoryComponent->get_work_shift_histories($start_date,$end_date,$user_id,true);
-
-
-
-             return response()->json($work_shift, 200);
-         } catch (Exception $e) {
-
-             return $this->sendError($e, 500, $request);
-         }
-     }
- 
-    /**
-     *
-     * @OA\Get(
-     *      path="/v2.0/work-shifts/get-by-user-id/{user_id}",
-     *      operationId="getWorkShiftByUserIdV2",
-     *      tags={"administrator.work_shift"},
-     *       security={
-     *           {"bearerAuth": {}}
-     *       },
-     *              @OA\Parameter(
-     *         name="user_id",
-     *         in="path",
-     *         description="user_id",
+     *  *  *              @OA\Parameter(
+     *         name="end_date",
+     *         in="query",
+     *         description="end_date",
      *         required=true,
      *  example="6"
      *      ),
@@ -2041,29 +1949,93 @@ class WorkShiftController extends Controller
             $start_date = request()->input("start_date");
             $end_date = request()->input("end_date");
 
-            if(empty($start_date) || empty($end_date)) {
+            if (empty($start_date) || empty($end_date)) {
                 return response()->json([
                     "message" => "start date and end date is required"
-                ],400);
+                ], 400);
             }
-
 
             $all_manager_department_ids = $this->get_all_departments_of_manager();
 
             $this->validateUserQuery($user_id, $all_manager_department_ids);
 
-
-            //  $business_times =    BusinessTime::where([
-            //     "is_weekend" => 1,
-            //     "business_id" => auth()->user()->business_id,
-            // ])->get();
-
-
-            $work_shift =   $this->workShiftHistoryComponent->get_work_shift_histories($start_date,$end_date,$user_id,true);
+            $user = User::where([
+                "id" => $user_id
+            ])->first();
 
 
 
-            return response()->json($work_shift, 200);
+
+            $work_shift_histories =   $this->workShiftHistoryComponent->get_work_shift_histories($start_date, $end_date, $user_id, false);
+
+
+            // Parse start and end dates
+            $start_date = Carbon::parse($start_date);
+            $end_date = Carbon::parse($end_date);
+
+            $joining_date = Carbon::parse($user->joining_date);
+
+            if ($joining_date->gt($end_date)) {
+                return response()->json(
+                    [
+                        "message" => ("Employee joining date is " . $joining_date)
+                    ],
+                    409
+                );
+            }
+
+            if ($joining_date->gt($start_date)) {
+                $start_date = $joining_date;
+            }
+
+
+            // Create date range between start and end dates
+            $date_range = $start_date->daysUntil($end_date->addDay());
+
+
+            $dates = [];
+            // Map date range to create attendance details
+            // Iterate through the date range
+            foreach ($date_range as $date) {
+                // Convert Carbon date object to string for comparison
+                $date = Carbon::parse($date);
+
+                // Initialize the date data array
+                $date_data = [
+                    "date" => $date,
+                ];
+
+                // Check if work shift histories are available
+                if (!empty($work_shift_histories)) {
+                    // Find the corresponding work shift history for the given date
+                    $work_shift_history = $work_shift_histories->first(function ($history) use ($date, $end_date) {
+                        $fromDate = Carbon::parse($history->from_date);
+                        $toDate = $history->to_date ? Carbon::parse($history->to_date) : $end_date;
+
+                        return $date->greaterThanOrEqualTo($fromDate)
+                            && ($toDate === null || $date->lessThanOrEqualTo($toDate));
+                    });
+
+                    // If a work shift history is found, get its details
+                    if (!empty($work_shift_history)) {
+
+
+                        $work_shift_details = $this->get_work_shift_detailsV3($work_shift_history, $date);
+
+                        // Add work shift details to the date data array
+                        $date_data["work_shift_details"]["is_weekend"] = $work_shift_details->is_weekend;
+                        $date_data["work_shift_details"]["start_at"] = $work_shift_details->start_at;
+                        $date_data["work_shift_details"]["end_at"] = $work_shift_details->end_at;
+                        $date_data["work_shift_details"]["work_shift_id"] = $work_shift_details->work_shift_id;
+                        $date_data["work_shift_details"]["break_minutes"] = round($work_shift_history->break_hours * 60);
+                    }
+                }
+
+                // Add the date data to the dates array
+                $dates[] = $date_data;
+            }
+
+            return response()->json($dates, 200);
         } catch (Exception $e) {
 
             return $this->sendError($e, 500, $request);
@@ -2160,16 +2132,16 @@ class WorkShiftController extends Controller
             }
 
 
-                WorkShiftHistory::where([
-                    "to_date" => NULL
-                ])
-                    ->whereIn("work_shift_id", $existingIds)
-                    // ->whereHas('users',function($query) use($work_shift_prev)  {
-                    //     $query->whereIn("users.id",$work_shift_prev->users()->pluck("users.id"));
-                    // })
-                    ->update([
-                        "to_date" => now()
-                    ]);
+            WorkShiftHistory::where([
+                "to_date" => NULL
+            ])
+                ->whereIn("work_shift_id", $existingIds)
+                // ->whereHas('users',function($query) use($work_shift_prev)  {
+                //     $query->whereIn("users.id",$work_shift_prev->users()->pluck("users.id"));
+                // })
+                ->update([
+                    "to_date" => now()
+                ]);
 
 
 
