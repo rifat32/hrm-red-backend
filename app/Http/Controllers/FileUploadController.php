@@ -14,8 +14,8 @@ class FileUploadController extends Controller
   /**
      *
      * @OA\Post(
-     *      path="/v1.0/files/single-file-upload",
-     *      operationId="createFileSingle",
+     *      path="/v3.0/files/single-file-upload",
+     *      operationId="createFileSingleV3",
      *      tags={"files"},
      *       security={
      *           {"bearerAuth": {}}
@@ -74,7 +74,7 @@ class FileUploadController extends Controller
      *     )
      */
 
-     public function createFileSingle(SingleFileUploadRequest $request)
+     public function createFileSingleV3(SingleFileUploadRequest $request)
      {
          try {
              $this->storeActivity($request, "DUMMY activity", "DUMMY description");

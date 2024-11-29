@@ -8,6 +8,7 @@ use App\Rules\DayValidation;
 use App\Rules\SomeTimes;
 use App\Rules\TimeOrderRule;
 use App\Rules\TimeValidation;
+use App\Rules\ValidateModuleIds;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
 
@@ -58,8 +59,21 @@ class AuthRegisterBusinessRequest extends BaseFormRequest
 
             'business.name' => 'required|string|max:255',
             'business.start_date' => 'required|date|before_or_equal:today',
+
+            'business.trail_end_date' => 'nullable|date',
+
+
+
+
+
+
             'business.about' => 'nullable|string',
             'business.web_page' => 'nullable|string',
+            'business.identifier_prefix' => 'nullable|string',
+            'business.pin_code' => 'nullable|string',
+
+            'business.enable_auto_business_setup' => 'nullable|boolean',
+
             'business.phone' => 'nullable|string',
             // 'business.email' => 'required|string|email|indisposable|max:255|unique:businesses,email',
             'business.email' => 'nullable|string|email|max:255|unique:businesses,email',
@@ -90,11 +104,16 @@ class AuthRegisterBusinessRequest extends BaseFormRequest
             'business.pension_scheme_name' => 'nullable|required_if:business.pension_scheme_registered,1|string',
             'business.pension_scheme_letters' => 'present|array',
 
+            'business.is_self_registered_businesses' => 'required|boolean',
 
 
+            'business.number_of_employees_allowed' => 'nullable|integer',
 
-
-
+            // "business.active_module_ids" => "present|array",
+            // "business.active_module_ids.*" => [
+            //     "numeric",
+            //     new ValidateModuleIds()
+            // ],
 
 
 
@@ -167,16 +186,17 @@ class AuthRegisterBusinessRequest extends BaseFormRequest
                 },
             ],
 
+            'business.service_plan_id' => 'required|numeric|exists:service_plans,id',
 
+            'business.reseller_id'=> "nullable|numeric|exists:users,id"
 
 
 
         ];
 
-        if(!auth()->user()) {
-            $rules['business.service_plan_id'] = 'required|numeric|exists:service_plans,id';
-            $rules['business.service_plan_discount_code'] = 'nullable|string';
 
+        if (request()->input('business.is_self_registered_businesses')) {
+            $rules['business.service_plan_discount_code'] = 'nullable|string';
 
         }
 
@@ -206,6 +226,11 @@ class AuthRegisterBusinessRequest extends BaseFormRequest
             'business.name.required' => 'The name field is required.',
             'business.about.string' => 'The about must be a string.',
             'business.web_page.string' => 'The web page must be a string.',
+            'business.identifier_prefix.string' => 'The identifier prefix field must be a string.',
+              'business.pin_code.string' => 'The pin code field must be a string.',
+            'business.enable_auto_business_setup.boolean' => 'The identifier prefix field must be a boolean.',
+
+
             'business.phone.string' => 'The phone must be a string.',
             // 'business.email.required' => 'The email field is required.',
             'business.email.email' => 'The email must be a valid email address.',
@@ -238,7 +263,7 @@ class AuthRegisterBusinessRequest extends BaseFormRequest
             'work_shift.end_date.date' => 'The work shift end date must be a valid date.',
             'work_shift.end_date.after_or_equal' => 'The work shift end date must be equal to or after the start date.',
             'work_shift.departments.present' => 'The work shift departments must be present and in array format.',
-           
+
             'work_shift.users.array' => 'The work shift users must be in array format.',
             'work_shift.users.*.numeric' => 'Each user ID must be a numeric value.',
             'work_shift.details.required' => 'The work shift details field is required.',

@@ -800,7 +800,10 @@ Route::delete('/v1.0/user-social-sites/{ids}', [UserSocialSiteController::class,
 // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 Route::post('/v1.0/auth/check-schedule-conflict', [BusinessController::class, "checkScheduleConflict"]);
 Route::post('/v1.0/auth/register-with-business', [BusinessController::class, "registerUserWithBusiness"]);
+
 Route::post('/v1.0/businesses', [BusinessController::class, "createBusiness"]);
+
+
 Route::put('/v1.0/businesses/toggle-active', [BusinessController::class, "toggleActiveBusiness"]);
 Route::put('/v1.0/businesses', [BusinessController::class, "updateBusiness"]);
 

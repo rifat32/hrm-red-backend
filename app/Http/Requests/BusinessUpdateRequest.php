@@ -52,8 +52,16 @@ class BusinessUpdateRequest extends BaseFormRequest
             'business.id' => 'required|numeric|required|exists:businesses,id',
             'business.name' => 'required|string|max:255',
             'business.start_date' => 'required|date|before_or_equal:today',
+
+            'business.trail_end_date' => 'nullable|date',
+
+
             'business.about' => 'nullable|string',
             'business.web_page' => 'nullable|string',
+            'business.identifier_prefix' => 'nullable|string',
+            'business.pin_code' => 'nullable|string',
+            'business.enable_auto_business_setup' => 'nullable|boolean',
+
             'business.phone' => 'nullable|string',
             // 'business.email' => 'required|string|email|indisposable|max:255',
             'business.email' => 'nullable|string|unique:businesses,email,' . $this->business["id"] . ',id',
@@ -77,7 +85,9 @@ class BusinessUpdateRequest extends BaseFormRequest
             'business.images' => 'nullable|array',
             'business.images.*' => 'nullable|string',
 
-
+            'business.is_self_registered_businesses' => 'required|boolean',
+            'business.number_of_employees_allowed' => 'nullable|integer',
+            'business.service_plan_id' => 'required|numeric|exists:service_plans,id',
 
             "times" => "present|array",
             "times.*.day" => 'required|numeric',
@@ -112,9 +122,11 @@ class BusinessUpdateRequest extends BaseFormRequest
 
 
 
-        if(auth()->user()->hasRole("superadmin")) {
-            $rules['business.flexible_rota_enabled'] = 'required|boolean';
+        if (request()->input('business.is_self_registered_businesses')) {
+            $rules['business.service_plan_discount_code'] = 'nullable|string';
+
         }
+
 
         return $rules;
 
@@ -163,6 +175,9 @@ class BusinessUpdateRequest extends BaseFormRequest
 
         'business.about.string' => 'The about field must be a string.',
         'business.web_page.string' => 'The web page field must be a string.',
+        'business.identifier_prefix.string' => 'The identifier prefix field must be a string.',
+          'business.pin_code.string' => 'The pin code field must be a string.',
+        'business.enable_auto_business_setup.boolean' => 'The identifier prefix field must be a boolean.',
         'business.phone.string' => 'The phone field must be a string.',
         // 'business.email.required' => 'The email field is required.',
         'business.email.email' => 'The email must be a valid email address.',

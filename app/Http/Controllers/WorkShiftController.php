@@ -2027,7 +2027,11 @@ class WorkShiftController extends Controller
                         $date_data["work_shift_details"]["start_at"] = $work_shift_details->start_at;
                         $date_data["work_shift_details"]["end_at"] = $work_shift_details->end_at;
                         $date_data["work_shift_details"]["work_shift_id"] = $work_shift_details->work_shift_id;
+                        $date_data["work_shift_details"]["day"] = $work_shift_details->day;
                         $date_data["work_shift_details"]["break_minutes"] = round($work_shift_history->break_hours * 60);
+
+                        $date_data["work_shift_details"]["type"] = $work_shift_details->type;
+
                     }
                 }
 

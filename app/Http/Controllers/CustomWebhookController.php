@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Utils\UserActivityUtil;
 use App\Models\ServicePlan;
 use App\Models\BusinessSubscription;
 use App\Models\User;

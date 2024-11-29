@@ -14,7 +14,7 @@
     },
     "servers": [
         {
-            "url": "http://hrm-backend-produ.interactivehr.co.uk/api",
+            "url": "http://production.hrm-backend.interactivehr.co.uk/api",
             "description": "Demo API Server"
         }
     ],
@@ -2839,7 +2839,103 @@
                 ],
                 "summary": "This method is to store attendance",
                 "description": "This method is to store attendance",
-                "operationId": "createMultipleBypassAttendance",
+                "operationId": "createMultipleBypassAttendanceV1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "user_ids": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "date"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "date"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v2.0/attendances/bypass/multiple": {
+            "post": {
+                "tags": [
+                    "attendances"
+                ],
+                "summary": "This method is to store attendance",
+                "description": "This method is to store attendance",
+                "operationId": "createMultipleBypassAttendanceV2",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -4962,177 +5058,6 @@
                 ]
             }
         },
-        "/v1.0/business-image": {
-            "post": {
-                "tags": [
-                    "business_management"
-                ],
-                "summary": "This method is to store business image ",
-                "description": "This method is to store business image",
-                "operationId": "createBusinessImage",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "image"
-                                ],
-                                "properties": {
-                                    "image": {
-                                        "description": "image to upload",
-                                        "type": "file",
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/v1.0/business-image-multiple": {
-            "post": {
-                "tags": [
-                    "business_management"
-                ],
-                "summary": "This method is to store business gallery",
-                "description": "This method is to store business gallery",
-                "operationId": "createBusinessImageMultiple",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "images[]"
-                                ],
-                                "properties": {
-                                    "images[]": {
-                                        "description": "array of images to upload",
-                                        "type": "array",
-                                        "items": {
-                                            "type": "file"
-                                        },
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/v1.0/businesses": {
             "get": {
                 "tags": [
@@ -5316,6 +5241,54 @@
                                             "gender": "male"
                                         }
                                     },
+                                    "times": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            {
+                                                "day": 0,
+                                                "start_at": "10:10:00",
+                                                "end_at": "10:15:00",
+                                                "is_weekend": true
+                                            },
+                                            {
+                                                "day": 1,
+                                                "start_at": "10:10:00",
+                                                "end_at": "10:15:00",
+                                                "is_weekend": true
+                                            },
+                                            {
+                                                "day": 2,
+                                                "start_at": "10:10:00",
+                                                "end_at": "10:15:00",
+                                                "is_weekend": true
+                                            },
+                                            {
+                                                "day": 3,
+                                                "start_at": "10:10:00",
+                                                "end_at": "10:15:00",
+                                                "is_weekend": true
+                                            },
+                                            {
+                                                "day": 4,
+                                                "start_at": "10:10:00",
+                                                "end_at": "10:15:00",
+                                                "is_weekend": true
+                                            },
+                                            {
+                                                "day": 5,
+                                                "start_at": "10:10:00",
+                                                "end_at": "10:15:00",
+                                                "is_weekend": true
+                                            },
+                                            {
+                                                "day": 6,
+                                                "start_at": "10:10:00",
+                                                "end_at": "10:15:00",
+                                                "is_weekend": true
+                                            }
+                                        ]
+                                    },
                                     "business": {
                                         "type": "string",
                                         "format": "array",
@@ -5324,6 +5297,9 @@
                                             "name": "ABCD businesses",
                                             "about": "Best businesses in Dhaka",
                                             "web_page": "https://www.facebook.com/",
+                                            "identifier_prefix": "identifier_prefix",
+                                            "pin_code": "pin_code",
+                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -5342,7 +5318,7 @@
                                                 "/c"
                                             ],
                                             "currency": "BDT",
-                                            "flexible_rota_enabled": 1
+                                            "number_of_employees_allowed": 20
                                         }
                                     }
                                 },
@@ -5440,6 +5416,9 @@
                                             "name": "ABCD businesses",
                                             "about": "Best businesses in Dhaka",
                                             "web_page": "https://www.facebook.com/",
+                                            "identifier_prefix": "identifier_prefix",
+                                            "pin_code": "pin_code",
+                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -5738,6 +5717,7 @@
                                         "type": "string",
                                         "format": "array",
                                         "example": {
+                                            "number_of_employees_allowed": 1,
                                             "pension_scheme_registered": 1,
                                             "pension_scheme_name": "hh",
                                             "pension_scheme_letters": [
@@ -5749,6 +5729,9 @@
                                             "start_date": "start_date",
                                             "about": "Best businesses in Dhaka",
                                             "web_page": "https://www.facebook.com/",
+                                            "identifier_prefix": "identifier_prefix",
+                                            "pin_code": "pin_code",
+                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -5918,6 +5901,7 @@
                                         "type": "string",
                                         "format": "array",
                                         "example": {
+                                            "number_of_employees_allowed": 0,
                                             "service_plan_id": 0,
                                             "service_plan_discount_code": 0,
                                             "pension_scheme_registered": 1,
@@ -5931,6 +5915,9 @@
                                             "start_date": "start_date",
                                             "about": "Best businesses in Dhaka",
                                             "web_page": "https://www.facebook.com/",
+                                            "identifier_prefix": "identifier_prefix",
+                                            "pin_code": "pin_code",
+                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -5949,6 +5936,637 @@
                                                 "/b",
                                                 "/c"
                                             ]
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/businesses-part-4": {
+            "put": {
+                "tags": [
+                    "business_management"
+                ],
+                "summary": "This method is to update user with business",
+                "description": "This method is to update user with business",
+                "operationId": "updateBusinessPart4",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user",
+                                    "business"
+                                ],
+                                "properties": {
+                                    "business": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": {
+                                            "id": 1,
+                                            "trail_end_date": "",
+                                            "is_self_registered_businesses": 1,
+                                            "service_plan_id": 0,
+                                            "service_plan_discount_code": 0,
+                                            "number_of_employees_allowed": 20
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/businesses-take-over": {
+            "put": {
+                "tags": [
+                    "business_management"
+                ],
+                "summary": "This method is to take over business",
+                "description": "This method is to  take over business",
+                "operationId": "takeOverBusiness",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user",
+                                    "id"
+                                ],
+                                "properties": {
+                                    "id": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": "1"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/businesses-part-1": {
+            "put": {
+                "tags": [
+                    "business_management"
+                ],
+                "summary": "This method is to update user with business",
+                "description": "This method is to update user with business",
+                "operationId": "updateBusinessPart1",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user",
+                                    "business"
+                                ],
+                                "properties": {
+                                    "user": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": {
+                                            "id": 1,
+                                            "first_Name": "Rifat",
+                                            "middle_Name": "Al-Ashwad",
+                                            "last_Name": "Al-Ashwad",
+                                            "email": "rifatalashwad@gmail.com",
+                                            "password": "12345678",
+                                            "password_confirmation": "12345678",
+                                            "phone": "01771034383",
+                                            "image": "https://images.unsplash.com/photo-1671410714831-969877d103b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                                            "gender": "male"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/businesses-part-2": {
+            "put": {
+                "tags": [
+                    "business_management"
+                ],
+                "summary": "This method is to update user with business",
+                "description": "This method is to update user with business",
+                "operationId": "updateBusinessPart2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user",
+                                    "business"
+                                ],
+                                "properties": {
+                                    "business": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": {
+                                            "id": 1,
+                                            "name": "ABCD businesses",
+                                            "about": "Best businesses in Dhaka",
+                                            "web_page": "https://www.facebook.com/",
+                                            "identifier_prefix": "identifier_prefix",
+                                            "pin_code": "pin_code",
+                                            "enable_auto_business_setup": "enable_auto_business_setup",
+                                            "phone": "01771034383",
+                                            "email": "rifatalashwad@gmail.com",
+                                            "additional_information": "No Additional Information",
+                                            "address_line_1": "Dhaka",
+                                            "address_line_2": "Dinajpur",
+                                            "lat": "23.704263332849386",
+                                            "long": "90.44707059805279",
+                                            "country": "Bangladesh",
+                                            "city": "Dhaka",
+                                            "postcode": "Dinajpur",
+                                            "logo": "https://images.unsplash.com/photo-1671410714831-969877d103b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                                            "image": "https://images.unsplash.com/photo-1671410714831-969877d103b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                                            "images": [
+                                                "/a",
+                                                "/b",
+                                                "/c"
+                                            ],
+                                            "currency": "BDT",
+                                            "number_of_employees_allowed": 1
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v2.0/businesses-part-2": {
+            "put": {
+                "tags": [
+                    "business_management"
+                ],
+                "summary": "This method is to update user with business",
+                "description": "This method is to update user with business",
+                "operationId": "updateBusinessPart2V2",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user",
+                                    "business"
+                                ],
+                                "properties": {
+                                    "business": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": {
+                                            "id": 1,
+                                            "name": "ABCD businesses",
+                                            "about": "Best businesses in Dhaka",
+                                            "web_page": "https://www.facebook.com/",
+                                            "identifier_prefix": "identifier_prefix",
+                                            "pin_code": "pin_code",
+                                            "enable_auto_business_setup": "enable_auto_business_setup",
+                                            "phone": "01771034383",
+                                            "email": "rifatalashwad@gmail.com",
+                                            "additional_information": "No Additional Information",
+                                            "address_line_1": "Dhaka",
+                                            "address_line_2": "Dinajpur",
+                                            "lat": "23.704263332849386",
+                                            "long": "90.44707059805279",
+                                            "country": "Bangladesh",
+                                            "city": "Dhaka",
+                                            "postcode": "Dinajpur",
+                                            "logo": "https://images.unsplash.com/photo-1671410714831-969877d103b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                                            "image": "https://images.unsplash.com/photo-1671410714831-969877d103b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                                            "images": [
+                                                "/a",
+                                                "/b",
+                                                "/c"
+                                            ],
+                                            "currency": "BDT",
+                                            "number_of_employees_allowed": 1
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/businesses-part-3": {
+            "put": {
+                "tags": [
+                    "business_management"
+                ],
+                "summary": "This method is to update user with business",
+                "description": "This method is to update user with business",
+                "operationId": "updateBusinessPart3",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user",
+                                    "business"
+                                ],
+                                "properties": {
+                                    "user": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": {
+                                            "id": 1,
+                                            "first_Name": "Rifat",
+                                            "middle_Name": "Al-Ashwad",
+                                            "last_Name": "Al-Ashwad",
+                                            "email": "rifatalashwad@gmail.com",
+                                            "password": "12345678",
+                                            "password_confirmation": "12345678",
+                                            "phone": "01771034383",
+                                            "image": "https://images.unsplash.com/photo-1671410714831-969877d103b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                                            "gender": "male"
+                                        }
+                                    },
+                                    "business": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": {
+                                            "id": 1,
+                                            "name": "ABCD businesses",
+                                            "about": "Best businesses in Dhaka",
+                                            "web_page": "https://www.facebook.com/",
+                                            "identifier_prefix": "identifier_prefix",
+                                            "pin_code": "pin_code",
+                                            "enable_auto_business_setup": "enable_auto_business_setup",
+                                            "phone": "01771034383",
+                                            "email": "rifatalashwad@gmail.com",
+                                            "additional_information": "No Additional Information",
+                                            "address_line_1": "Dhaka",
+                                            "address_line_2": "Dinajpur",
+                                            "lat": "23.704263332849386",
+                                            "long": "90.44707059805279",
+                                            "country": "Bangladesh",
+                                            "city": "Dhaka",
+                                            "postcode": "Dinajpur",
+                                            "logo": "https://images.unsplash.com/photo-1671410714831-969877d103b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                                            "image": "https://images.unsplash.com/photo-1671410714831-969877d103b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+                                            "images": [
+                                                "/a",
+                                                "/b",
+                                                "/c"
+                                            ],
+                                            "currency": "BDT",
+                                            "number_of_employees_allowed": 10
                                         }
                                     }
                                 },
@@ -6231,6 +6849,9 @@
                                             "name": "ABCD businesses",
                                             "about": "Best businesses in Dhaka",
                                             "web_page": "https://www.facebook.com/",
+                                            "identifier_prefix": "identifier_prefix",
+                                            "pin_code": "pin_code",
+                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -6388,6 +7009,161 @@
                 ]
             }
         },
+        "/v1.0/business-subscriptions/{id}": {
+            "get": {
+                "tags": [
+                    "business_management"
+                ],
+                "summary": "This method is to get subscriptions by id",
+                "description": "This method is to get subscriptions by id",
+                "operationId": "getSubscriptionsByBusinessId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "example": "1"
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "path",
+                        "description": "per_page",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v2.0/businesses/{id}": {
+            "get": {
+                "tags": [
+                    "business_management"
+                ],
+                "summary": "This method is to get business by id",
+                "description": "This method is to get business by id",
+                "operationId": "getBusinessByIdV2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/v1.0/businesses-pension-information/{id}": {
             "get": {
                 "tags": [
@@ -6401,6 +7177,13 @@
                         "name": "id",
                         "in": "path",
                         "description": "id",
+                        "required": true,
+                        "example": "1"
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "path",
+                        "description": "per_page",
                         "required": true,
                         "example": "1"
                     }
@@ -7302,93 +8085,6 @@
                                                 "is_weekend": true
                                             }
                                         ]
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/v1.0/candidates/multiple-file-upload": {
-            "post": {
-                "tags": [
-                    "candidates"
-                ],
-                "summary": "This method is to store multiple candidate files",
-                "description": "This method is to store multiple candidate files",
-                "operationId": "createCandidateFileMultiple",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "files[]"
-                                ],
-                                "properties": {
-                                    "files[]": {
-                                        "description": "array of files to upload",
-                                        "type": "array",
-                                        "items": {
-                                            "type": "file"
-                                        },
-                                        "collectionFormat": "multi"
                                     }
                                 },
                                 "type": "object"
@@ -13274,25 +13970,11 @@
                         "example": "description"
                     },
                     {
-                        "name": "type",
-                        "in": "query",
-                        "description": "type",
-                        "required": true,
-                        "example": "type"
-                    },
-                    {
                         "name": "search_key",
                         "in": "query",
                         "description": "search_key",
                         "required": true,
                         "example": "search_key"
-                    },
-                    {
-                        "name": "is_personal",
-                        "in": "query",
-                        "description": "is_personal",
-                        "required": true,
-                        "example": "1"
                     },
                     {
                         "name": "order_by",
@@ -13381,20 +14063,10 @@
                                         "format": "string",
                                         "example": "Updated Christmas"
                                     },
-                                    "type": {
-                                        "type": "string",
-                                        "format": "string",
-                                        "example": "regular"
-                                    },
                                     "description": {
                                         "type": "string",
                                         "format": "string",
                                         "example": "description"
-                                    },
-                                    "is_personal": {
-                                        "type": "boolean",
-                                        "format": "boolean",
-                                        "example": "0"
                                     },
                                     "departments": {
                                         "type": "string",
@@ -13569,11 +14241,6 @@
                                         "type": "string",
                                         "format": "string",
                                         "example": "description"
-                                    },
-                                    "is_personal": {
-                                        "type": "boolean",
-                                        "format": "boolean",
-                                        "example": "0"
                                     },
                                     "departments": {
                                         "type": "string",
@@ -14586,6 +15253,422 @@
                 "summary": "This method is to store files",
                 "description": "This method is to store files",
                 "operationId": "createFileSingle",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "file"
+                                ],
+                                "properties": {
+                                    "file": {
+                                        "description": "file to upload",
+                                        "type": "file",
+                                        "collectionFormat": "multi"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/files/multiple-file-upload": {
+            "post": {
+                "tags": [
+                    "files"
+                ],
+                "summary": "This method is to store multiple leave files",
+                "description": "This method is to store multiple leave files",
+                "operationId": "createFileMultiple",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "files[]"
+                                ],
+                                "properties": {
+                                    "files[]": {
+                                        "description": "array of files to upload",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "file"
+                                        },
+                                        "collectionFormat": "multi"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v2.0/files/single-file-upload": {
+            "post": {
+                "tags": [
+                    "files"
+                ],
+                "summary": "This method is to store files",
+                "description": "This method is to store files",
+                "operationId": "createFileSingleV2",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "file"
+                                ],
+                                "properties": {
+                                    "file": {
+                                        "description": "file to upload",
+                                        "type": "file",
+                                        "collectionFormat": "multi"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v2.0/files/multiple-file-upload": {
+            "post": {
+                "tags": [
+                    "files"
+                ],
+                "summary": "This method is to store multiple leave files",
+                "description": "This method is to store multiple leave files",
+                "operationId": "createFileMultipleV2",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "files[]"
+                                ],
+                                "properties": {
+                                    "files[]": {
+                                        "description": "array of files to upload",
+                                        "type": "array",
+                                        "items": {
+                                            "type": "file"
+                                        },
+                                        "collectionFormat": "multi"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/file/{filename}": {
+            "get": {
+                "tags": [
+                    "files"
+                ],
+                "summary": "This method is to get  user ",
+                "description": "This method is to get user",
+                "operationId": "getFile",
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "in": "path",
+                        "description": "filename",
+                        "required": true,
+                        "example": "filename"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v3.0/files/single-file-upload": {
+            "post": {
+                "tags": [
+                    "files"
+                ],
+                "summary": "This method is to store files",
+                "description": "This method is to store files",
+                "operationId": "createFileSingleV3",
                 "requestBody": {
                     "content": {
                         "multipart/form-data": {
@@ -19140,93 +20223,6 @@
                         "example": "1,2,3"
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/v1.0/leaves/multiple-file-upload": {
-            "post": {
-                "tags": [
-                    "leaves"
-                ],
-                "summary": "This method is to store multiple leave files",
-                "description": "This method is to store multiple leave files",
-                "operationId": "createLeaveFileMultiple",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "files[]"
-                                ],
-                                "properties": {
-                                    "files[]": {
-                                        "description": "array of files to upload",
-                                        "type": "array",
-                                        "items": {
-                                            "type": "file"
-                                        },
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -29666,90 +30662,6 @@
                 ]
             }
         },
-        "/v1.0/setting-payslip/upload-logo": {
-            "post": {
-                "tags": [
-                    "settings.setting_payroll.payslip"
-                ],
-                "summary": "This method is to store payslip logo",
-                "description": "This method is to store payslip logo",
-                "operationId": "createSettingPayslipUploadLogo",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "image"
-                                ],
-                                "properties": {
-                                    "image": {
-                                        "description": "image to upload",
-                                        "type": "file",
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/v1.0/setting-payslip": {
             "get": {
                 "tags": [
@@ -32251,90 +33163,6 @@
                 ]
             }
         },
-        "/v1.0/user-assets/single-file-upload": {
-            "post": {
-                "tags": [
-                    "user_assets"
-                ],
-                "summary": "This method is to store user asset file ",
-                "description": "This method is to store user asset file",
-                "operationId": "createUserAssetFileSingle",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "file"
-                                ],
-                                "properties": {
-                                    "file": {
-                                        "description": "file to upload",
-                                        "type": "file",
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/v1.0/user-assets": {
             "get": {
                 "tags": [
@@ -32856,6 +33684,93 @@
                 ]
             }
         },
+        "/v1.0/user-assets/return": {
+            "put": {
+                "tags": [
+                    "user_assets"
+                ],
+                "summary": "This method is to update  user document ",
+                "description": "This method is to update user document",
+                "operationId": "returnUserAsset",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "number",
+                                        "format": "number",
+                                        "example": "Updated Christmas"
+                                    },
+                                    "user_id": {
+                                        "type": "integer",
+                                        "format": "int",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/v1.0/user-assets/{id}": {
             "get": {
                 "tags": [
@@ -32947,90 +33862,6 @@
                         "example": "1,2,3"
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/v1.0/user-documents/single-file-upload": {
-            "post": {
-                "tags": [
-                    "user_documents"
-                ],
-                "summary": "This method is to store user doc file ",
-                "description": "This method is to store user doc file",
-                "operationId": "createUserDocumentFileSingle",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "file"
-                                ],
-                                "properties": {
-                                    "file": {
-                                        "description": "file to upload",
-                                        "type": "file",
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -34609,261 +35440,6 @@
                         "example": "1,2,3"
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/v1.0/users/single-file-upload": {
-            "post": {
-                "tags": [
-                    "user_management"
-                ],
-                "summary": "This method is to store user file ",
-                "description": "This method is to store user file",
-                "operationId": "createUserFileSingle",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "file"
-                                ],
-                                "properties": {
-                                    "file": {
-                                        "description": "file to upload",
-                                        "type": "file",
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/v1.0/users/multiple-file-upload": {
-            "post": {
-                "tags": [
-                    "user_management"
-                ],
-                "summary": "This method is to store multiple user files",
-                "description": "This method is to store multiple user files",
-                "operationId": "createUserFileMultiple",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "files[]"
-                                ],
-                                "properties": {
-                                    "files[]": {
-                                        "description": "array of files to upload",
-                                        "type": "array",
-                                        "items": {
-                                            "type": "file"
-                                        },
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/v1.0/user-image": {
-            "post": {
-                "tags": [
-                    "user_management"
-                ],
-                "summary": "This method is to store user image ",
-                "description": "This method is to store user image",
-                "operationId": "createUserImage",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "image"
-                                ],
-                                "properties": {
-                                    "image": {
-                                        "description": "image to upload",
-                                        "type": "file",
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -39505,6 +40081,263 @@
                 ]
             }
         },
+        "/v1.0/users/load-data-for-leaves/{id}": {
+            "get": {
+                "tags": [
+                    "user_management.employee"
+                ],
+                "summary": "This method is to get user attendance related data by id",
+                "description": "This method is to get user attendance related data by id",
+                "operationId": "getLoadDataForLeaveByUserId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "example": "6"
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "path",
+                        "description": "start_date",
+                        "required": true,
+                        "example": "1"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "path",
+                        "description": "end_date",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/users/load-data-for-attendances/{id}": {
+            "get": {
+                "tags": [
+                    "user_management.employee"
+                ],
+                "summary": "This method is to get user attendance related data by id",
+                "description": "This method is to get user attendance related data by id",
+                "operationId": "getLoadDataForAttendanceByUserId",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "example": "6"
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "path",
+                        "description": "start_date",
+                        "required": true,
+                        "example": "1"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "path",
+                        "description": "end_date",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/load-global-data-for-attendances": {
+            "get": {
+                "tags": [
+                    "user_management.employee"
+                ],
+                "summary": "This method is to get user attendance related data ",
+                "description": "This method is to get user attendance related data ",
+                "operationId": "getLoadGlobalDataForAttendance",
+                "parameters": [
+                    {
+                        "name": "start_date",
+                        "in": "path",
+                        "description": "start_date",
+                        "required": true,
+                        "example": "1"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "path",
+                        "description": "end_date",
+                        "required": true,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/v1.0/users/get-disable-days-for-attendances/{id}": {
             "get": {
                 "tags": [
@@ -39761,6 +40594,20 @@
                         "name": "is_including_attendance",
                         "in": "path",
                         "description": "is_including_attendance",
+                        "required": true,
+                        "example": "1"
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "path",
+                        "description": "start_date",
+                        "required": true,
+                        "example": "1"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "path",
+                        "description": "end_date",
                         "required": true,
                         "example": "1"
                     }
@@ -41315,90 +42162,6 @@
                         "example": "1,2,3"
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocesseble Content",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {}
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/v1.0/user-payslips/single-file-upload": {
-            "post": {
-                "tags": [
-                    "user_payslips"
-                ],
-                "summary": "This method is to store user payslip file ",
-                "description": "This method is to store user payslip file",
-                "operationId": "createPayslipFileSingle",
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "required": [
-                                    "file"
-                                ],
-                                "properties": {
-                                    "file": {
-                                        "description": "file to upload",
-                                        "type": "file",
-                                        "collectionFormat": "multi"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -45935,6 +46698,204 @@
                 ]
             }
         },
+        "/v1.0/work-shifts-check": {
+            "put": {
+                "tags": [
+                    "administrator.work_shift"
+                ],
+                "summary": "This method is to update work shift ",
+                "description": "This method is to update work_shift",
+                "operationId": "updateWorkShiftCheck",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "number",
+                                        "format": "number",
+                                        "example": "Updated Christmas"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Updated Christmas"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "regular"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "description"
+                                    },
+                                    "is_personal": {
+                                        "type": "boolean",
+                                        "format": "boolean",
+                                        "example": "0"
+                                    },
+                                    "break_type": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "paid"
+                                    },
+                                    "break_hours": {
+                                        "type": "boolean",
+                                        "format": "boolean",
+                                        "example": "0"
+                                    },
+                                    "departments": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            1,
+                                            2,
+                                            3,
+                                            4
+                                        ]
+                                    },
+                                    "work_locations": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "users": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "details": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            {
+                                                "day": "0",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "1",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "2",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "3",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "4",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "5",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "6",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            }
+                                        ]
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-11-16"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/v1.0/work-shifts/toggle-active": {
             "put": {
                 "tags": [
@@ -46324,6 +47285,94 @@
                 ]
             }
         },
+        "/v2.0/work-shifts/get-by-user-id/{user_id}": {
+            "get": {
+                "tags": [
+                    "administrator.work_shift"
+                ],
+                "summary": "This method is to get work shift by user id",
+                "description": "This method is to get work shift by user id",
+                "operationId": "getWorkShiftByUserIdV2",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "user_id",
+                        "required": true,
+                        "example": "6"
+                    },
+                    {
+                        "name": "start_date",
+                        "in": "query",
+                        "description": "start_date",
+                        "required": true,
+                        "example": "6"
+                    },
+                    {
+                        "name": "end_date",
+                        "in": "query",
+                        "description": "end_date",
+                        "required": true,
+                        "example": "6"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/v1.0/work-shifts/{ids}": {
             "delete": {
                 "tags": [
@@ -46339,6 +47388,426 @@
                         "description": "ids",
                         "required": true,
                         "example": "1,2,3"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/work-shift-histories": {
+            "put": {
+                "tags": [
+                    "work_shift_histories"
+                ],
+                "summary": "This method is to update work shift",
+                "description": "This method is to update work_shift",
+                "operationId": "updateWorkShiftHistory",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "id": {
+                                        "type": "number",
+                                        "format": "number",
+                                        "example": "Updated Christmas"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "Updated Christmas"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "regular"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "description"
+                                    },
+                                    "is_personal": {
+                                        "type": "boolean",
+                                        "format": "boolean",
+                                        "example": "0"
+                                    },
+                                    "break_type": {
+                                        "type": "string",
+                                        "format": "string",
+                                        "example": "paid"
+                                    },
+                                    "break_hours": {
+                                        "type": "boolean",
+                                        "format": "boolean",
+                                        "example": "0"
+                                    },
+                                    "departments": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            1,
+                                            2,
+                                            3,
+                                            4
+                                        ]
+                                    },
+                                    "work_locations": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "users": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            1,
+                                            2,
+                                            3
+                                        ]
+                                    },
+                                    "details": {
+                                        "type": "string",
+                                        "format": "array",
+                                        "example": [
+                                            {
+                                                "day": "0",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "1",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "2",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "3",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "4",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "5",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            },
+                                            {
+                                                "day": "6",
+                                                "start_at": "",
+                                                "end_at": "",
+                                                "is_weekend": 0
+                                            }
+                                        ]
+                                    },
+                                    "start_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2023-11-16"
+                                    },
+                                    "end_date": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": ""
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/work-shift-histories/{ids}": {
+            "delete": {
+                "tags": [
+                    "work_shift_histories"
+                ],
+                "summary": "This method is to delete work shift by id",
+                "description": "This method is to delete work shift by id",
+                "operationId": "deleteWorkShiftHistoriesByIds",
+                "parameters": [
+                    {
+                        "name": "ids",
+                        "in": "path",
+                        "description": "ids",
+                        "required": true,
+                        "example": "1,2,3"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/work-shift-histories/{id}": {
+            "get": {
+                "tags": [
+                    "work_shift_histories"
+                ],
+                "summary": "This method is to get work shift by id",
+                "description": "This method is to get work shift by id",
+                "operationId": "getWorkShiftHistoryById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id",
+                        "required": true,
+                        "example": "6"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocesseble Content",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1.0/current-work-shift-history/{employee_id}": {
+            "get": {
+                "tags": [
+                    "work_shift_histories"
+                ],
+                "summary": "This method is to get work shift by id",
+                "description": "This method is to get work shift by id",
+                "operationId": "getCurrentWorkShiftHistory",
+                "parameters": [
+                    {
+                        "name": "employee_id",
+                        "in": "path",
+                        "description": "employee_id",
+                        "required": true,
+                        "example": "6"
                     }
                 ],
                 "responses": {

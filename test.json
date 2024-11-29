@@ -1,0 +1,83 @@
+{
+    "user": {
+        "image": "",
+        "first_Name": "MD",
+        "last_Name": "test",
+        "email": "business_owner2@youmail.com",
+        "phone": "01555555555",
+        "password": "12345678@We",
+        "password_confirmation": "",
+        "send_password": 0
+    },
+    "business": {
+        "name": "Our Business",
+        "email": "test_business@yop.com",
+        "phone": "01555555555",
+        "web_page": "",
+        "address_line_1": "London Luton Airport (LTN), Airport Way, Luton, UK",
+        "address_line_2": "",
+        "lat": "",
+        "long": "",
+        "country": "United Kingdom",
+        "city": "london",
+        "currency": "£",
+        "postcode": "LU2 9LY",
+        "start_date": "01-11-2012",
+        "type": "regular",
+        "logo": "",
+        "image": "",
+        "images": [],
+        "flexible_rota_enabled": 0,
+        "service_plan_id": 1,
+        "discount_code": "",
+        "is_self_registered_businesses": 1,
+        "trail_end_date": "31-01-2025",
+        "pension_scheme_registered": 0,
+        "pension_scheme_name": "",
+        "pension_scheme_letters": [{ "id": 1, "file": "", "description": "" }]
+    },
+    "times": [
+        {
+            "day": 0,
+            "start_at": "09:00:00",
+            "end_at": "18:00:00",
+            "is_weekend": true
+        },
+        {
+            "day": 1,
+            "start_at": "09:00:00",
+            "end_at": "18:00:00",
+            "is_weekend": false
+        },
+        {
+            "day": 2,
+            "start_at": "09:00:00",
+            "end_at": "18:00:00",
+            "is_weekend": false
+        },
+        {
+            "day": 3,
+            "start_at": "09:00:00",
+            "end_at": "18:00:00",
+            "is_weekend": false
+        },
+        {
+            "day": 4,
+            "start_at": "09:00:00",
+            "end_at": "18:00:00",
+            "is_weekend": false
+        },
+        {
+            "day": 5,
+            "start_at": "09:00:00",
+            "end_at": "18:00:00",
+            "is_weekend": false
+        },
+        {
+            "day": 6,
+            "start_at": "09:00:00",
+            "end_at": "18:00:00",
+            "is_weekend": false
+        }
+    ]
+}
