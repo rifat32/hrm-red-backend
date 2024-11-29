@@ -4,6 +4,7 @@ use App\Http\Controllers\CustomWebhookController;
 use App\Http\Controllers\SetUpController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\DeveloperLoginController;
+use App\Http\Controllers\UpdateDatabaseController;
 use App\Models\Attendance;
 use App\Models\AttendanceHistory;
 use App\Models\AttendanceProject;
@@ -85,7 +86,7 @@ Route::get("/subscriptions/get-success-payment",[SubscriptionController::class,"
 Route::get("/subscriptions/get-failed-payment",[SubscriptionController::class,"stripePaymentFailed"])->name("subscription.failed_payment");
 
 
-
+Route::get("/database-update", [UpdateDatabaseController::class, "updateDatabase"]);
 
 
 

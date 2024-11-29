@@ -548,7 +548,7 @@ trait BusinessUtil
         }
 
 
-        $this->loadDefaultEmailTemplates($business->id);
+        // $this->loadDefaultEmailTemplates($business->id);
 
 
         // $this->loadDefaultSettingLeaveType($business);
@@ -564,7 +564,7 @@ trait BusinessUtil
 
         $this->loadDefaultPaymentDateSetting($business);
 
-        $this->defaultDataSetupForBusiness([$business]);
+        // $this->defaultDataSetupForBusiness([$business]);
 
         // $this->loadDefaultEmailTemplate($business);
     }
@@ -988,13 +988,13 @@ trait BusinessUtil
         if (env("SEND_EMAIL") == true) {
             $this->checkEmailSender($user->id, 0);
 
-            try {
-                Mail::to($request_data['user']['email'])->send(new BusinessWelcomeMail($user, $password));
-            } catch (\Exception $e) {
-                // Optionally log the error message if needed
-                Log::error("Failed to send email: " . $e->getMessage());
-                // Continue processing without interrupting the flow
-            }
+            // try {
+            //     Mail::to($request_data['user']['email'])->send(new BusinessWelcomeMail($user, $password));
+            // } catch (\Exception $e) {
+            //     // Optionally log the error message if needed
+            //     Log::error("Failed to send email: " . $e->getMessage());
+            //     // Continue processing without interrupting the flow
+            // }
 
 
             $this->storeEmailSender($user->id, 0);
