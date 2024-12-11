@@ -2699,7 +2699,7 @@ class BusinessController extends Controller
         }
     }
 
-    /**
+ /**
      *
      * @OA\Get(
      *      path="/v1.0/business-subscriptions/{id}",
@@ -2760,88 +2760,87 @@ class BusinessController extends Controller
      *     )
      */
 
-    public function getSubscriptionsByBusinessId($id, Request $request)
-    {
+     public function getSubscriptionsByBusinessId($id, Request $request)
+     {
 
-        try {
-            $this->storeActivity($request, "DUMMY activity", "DUMMY description");
-            if (!$request->user()->hasPermissionTo('business_view')) {
-                return response()->json([
-                    "message" => "You can not perform this action"
-                ], 401);
-            }
+         try {
+             $this->storeActivity($request, "DUMMY activity", "DUMMY description");
+             if (!$request->user()->hasPermissionTo('business_view')) {
+                 return response()->json([
+                     "message" => "You can not perform this action"
+                 ], 401);
+             }
 
-            $business = $this->businessOwnerCheck($id);
+             $business = $this->businessOwnerCheck($id);
 
-            $businessSubscriptionsQuery = BusinessSubscription::with("service_plan")
-                ->where([
-                    "business_id" => $business->id
-                ]);
-
-
-            $business_subscriptions = $this->retrieveData($businessSubscriptionsQuery, "business_subscriptions.id");
-            $upcoming_business_subscription = [];
+             $businessSubscriptionsQuery = BusinessSubscription::with("service_plan")
+                 ->where([
+                     "business_id" => $business->id
+                 ]);
 
 
-            $last_business_subscription = $businessSubscriptionsQuery->latest()->first();
-
-            if (!empty($last_business_subscription)) {
-
-                $business_subscription_end_date = Carbon::parse($last_business_subscription->end_date);
-
-                // $upcoming_business_subscription_start_date = Carbon::parse($business_subscription_end_date->addDays($last_subscription->service_plan->duration_months));
-
-                $upcoming_business_subscription_start_date = $business_subscription_end_date;
-
-                $upcoming_service_plan = $last_business_subscription->service_plan;
-
-                $upcoming_business_subscription = [
-                    'service_plan_id' => $upcoming_service_plan->id,
-                    'start_date' => $upcoming_business_subscription_start_date,  // Start date of the subscription
-                    'end_date' => Carbon::parse($upcoming_business_subscription_start_date)->addDays($last_business_subscription->service_plan->duration_months),  // End date based on plan duration
-                    'amount' => $upcoming_service_plan->price,
-                    "service_plan" => $upcoming_service_plan
-                ];
-            } else {
-                $service_plan =    ServicePlan::where("id", $business->service_plan_id)->first();
-
-                if ($service_plan) {
-
-                    // Check if trail_end_date is empty or a past date
-                    if (empty($business->trail_end_date) || Carbon::parse($business->trail_end_date)->isPast()) {
-                        $start_date = today();
-                    } else {
-                        // If trail_end_date is a future date
-                        $start_date = Carbon::parse($business->trail_end_date);
-                    }
-                    $upcoming_business_subscription = [
-                        'service_plan_id' => $service_plan->id,
-                        'start_date' => $start_date,
-                        'end_date' => Carbon::parse($start_date)->addDays($service_plan->duration_months),
-                        'amount' => $service_plan->price,
-                        "service_plan" => $service_plan
-                    ];
-                }
-            }
+             $business_subscriptions = $this->retrieveData($businessSubscriptionsQuery, "business_subscriptions.id");
+             $upcoming_business_subscription = [];
 
 
-            $responseData = [
-                "subscriptions" => $business_subscriptions,
-                "upcoming_subscription" => $upcoming_business_subscription
-            ];
+             $last_business_subscription = $businessSubscriptionsQuery->latest()->first();
+
+             if (!empty($last_business_subscription)) {
+
+                 $business_subscription_end_date = Carbon::parse($last_business_subscription->end_date);
+
+                 // $upcoming_business_subscription_start_date = Carbon::parse($business_subscription_end_date->addDays($last_subscription->service_plan->duration_months));
+
+                 $upcoming_business_subscription_start_date = $business_subscription_end_date;
+
+                 $upcoming_service_plan = $last_business_subscription->service_plan;
+
+                 $upcoming_business_subscription = [
+                     'service_plan_id' => $upcoming_service_plan->id,
+                     'start_date' => $upcoming_business_subscription_start_date,  // Start date of the subscription
+                     'end_date' => Carbon::parse($upcoming_business_subscription_start_date)->addDays($last_business_subscription->service_plan->duration_months),  // End date based on plan duration
+                     'amount' => $upcoming_service_plan->price,
+                     "service_plan" => $upcoming_service_plan
+                 ];
+             } else {
+                 $service_plan =    ServicePlan::where("id", $business->service_plan_id)->first();
+
+                 if ($service_plan) {
+
+                     // Check if trail_end_date is empty or a past date
+                     if (empty($business->trail_end_date) || Carbon::parse($business->trail_end_date)->isPast()) {
+                         $start_date = today();
+                     } else {
+                         // If trail_end_date is a future date
+                         $start_date = Carbon::parse($business->trail_end_date);
+                     }
+                     $upcoming_business_subscription = [
+                         'service_plan_id' => $service_plan->id,
+                         'start_date' => $start_date,
+                         'end_date' => Carbon::parse($start_date)->addDays($service_plan->duration_months),
+                         'amount' => $service_plan->price,
+                         "service_plan" => $service_plan
+                     ];
+                 }
+             }
 
 
+             $responseData = [
+                 "subscriptions" => $business_subscriptions,
+                 "upcoming_subscription" => $upcoming_business_subscription
+             ];
 
 
 
 
-            return response()->json($responseData, 200);
-        } catch (Exception $e) {
 
-            return $this->sendError($e, 500, $request);
-        }
-    }
 
+             return response()->json($responseData, 200);
+         } catch (Exception $e) {
+
+             return $this->sendError($e, 500, $request);
+         }
+     }
 
 
 

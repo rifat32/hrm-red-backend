@@ -814,6 +814,7 @@ Route::put('/v1.0/businesses-part-3', [BusinessController::class, "updateBusines
 Route::put('/v1.0/business-pension-information', [BusinessController::class, "updateBusinessPensionInformation"]);
 
 
+Route::get('/v1.0/business-subscriptions/{id}', [BusinessController::class, "getSubscriptionsByBusinessId"]);
 
 
 

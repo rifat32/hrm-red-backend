@@ -17,7 +17,9 @@ class DeveloperMiddleware
     public function handle(Request $request, Closure $next)
     {
         if(!env("DEVELOPER_LOGIN_ENABLED")) {
-            return redirect("/");
+            return response()->json([
+                "message" => "developer login is lon enabled."
+            ]);
         }
 
         if($request->session()->get("token") !== '12345678' && !env("DeveloperAutoLogin")) {

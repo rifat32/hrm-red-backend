@@ -65,10 +65,10 @@ class Business extends Model
         'pin_code'
     ];
 
-    public function emailSettings()
-    {
-        return $this->hasOne(BusinessEmailSetting::class);
-    }
+    // public function emailSettings()
+    // {
+    //     return $this->hasOne(BusinessEmailSetting::class);
+    // }
 
 
     private function isValidSubscription($subscription)

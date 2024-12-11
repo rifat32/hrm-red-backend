@@ -26,35 +26,43 @@ class Designation extends Model
 
     public function getIsActiveAttribute($value)
     {
+
         $is_active = $value;
         $user = auth()->user();
 
-        if(!empty($user)) {
-            if (empty($user->business_id)) {
-                if (empty($this->business_id) && $this->is_default == 1) {
-                    if (!$user->hasRole("superadmin")) {
-                        $disabled = $this->disabled()->where([
-                            "created_by" => $user->id
-                        ])
-                            ->first();
-                        if ($disabled) {
-                            $is_active = 0;
-                        }
-                    }
-                }
-            } else {
-                if (empty($this->business_id)) {
-                    $disabled = $this->disabled()->where([
-                        "business_id" => $user->business_id
-                    ])
-                        ->first();
-                    if ($disabled) {
-                        $is_active = 0;
-                    }
-                }
-            }
+        if(empty($user)){
+            return 1;
         }
 
+        if(empty($user->business_id)) {
+            if(empty($this->business_id) && $this->is_default == 1) {
+                if(!$user->hasRole("superadmin")) {
+                    $disabled = $this->disabled()->where([
+                        "created_by" => $user->id
+                   ])
+                   ->first();
+                   if($disabled) {
+                      $is_active = 0;
+                   }
+                }
+               }
+
+
+        } else {
+
+            if(empty($this->business_id)) {
+             $disabled = $this->disabled()->where([
+                  "business_id" => $user->business_id
+             ])
+             ->first();
+             if($disabled) {
+                $is_active = 0;
+             }
+
+            }
+
+
+        }
 
 
 
