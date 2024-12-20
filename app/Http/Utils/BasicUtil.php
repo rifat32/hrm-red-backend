@@ -185,6 +185,7 @@ trait BasicUtil
 
 
     public function get_all_departments_of_manager() {
+
         $all_manager_department_ids = [];
         $manager_departments = Department::where("manager_id", auth()->user()->id)->get();
         foreach ($manager_departments as $manager_department) {
@@ -412,15 +413,19 @@ public function moveUploadedFiles($files, $location) {
 
 
 
-public function storeUploadedFiles($filePaths, $fileKey, $location, $arrayOfString = NULL)
+public function storeUploadedFiles($filePaths, $fileKey, $location, $arrayOfString = NULL,$businessId=NULL)
     {
 
 
         // Get the business ID from the authenticated user
-        $businessId = auth()->user()->business_id;
+        if(empty($businessId)){
+            $businessId = auth()->user()->business_id;
+        }
+
 
         // Add the business ID to the location path
         $location = "{$businessId}/{$location}";
+
 
         if (is_array($arrayOfString)) {
             return collect($filePaths)->map(function ($filePathItem) use ($fileKey, $location) {

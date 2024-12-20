@@ -14,7 +14,7 @@
     },
     "servers": [
         {
-            "url": "http://production.hrm-backend.interactivehr.co.uk/api",
+            "url": "http://127.0.0.1:8000/api",
             "description": "Demo API Server"
         }
     ],
@@ -5299,7 +5299,6 @@
                                             "web_page": "https://www.facebook.com/",
                                             "identifier_prefix": "identifier_prefix",
                                             "pin_code": "pin_code",
-                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -5418,7 +5417,6 @@
                                             "web_page": "https://www.facebook.com/",
                                             "identifier_prefix": "identifier_prefix",
                                             "pin_code": "pin_code",
-                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -5731,7 +5729,6 @@
                                             "web_page": "https://www.facebook.com/",
                                             "identifier_prefix": "identifier_prefix",
                                             "pin_code": "pin_code",
-                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -5901,6 +5898,7 @@
                                         "type": "string",
                                         "format": "array",
                                         "example": {
+                                            "is_self_registered_businesses": 0,
                                             "number_of_employees_allowed": 0,
                                             "service_plan_id": 0,
                                             "service_plan_discount_code": 0,
@@ -5917,7 +5915,6 @@
                                             "web_page": "https://www.facebook.com/",
                                             "identifier_prefix": "identifier_prefix",
                                             "pin_code": "pin_code",
-                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -6305,7 +6302,6 @@
                                             "web_page": "https://www.facebook.com/",
                                             "identifier_prefix": "identifier_prefix",
                                             "pin_code": "pin_code",
-                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -6418,7 +6414,6 @@
                                             "web_page": "https://www.facebook.com/",
                                             "identifier_prefix": "identifier_prefix",
                                             "pin_code": "pin_code",
-                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -6547,7 +6542,6 @@
                                             "web_page": "https://www.facebook.com/",
                                             "identifier_prefix": "identifier_prefix",
                                             "pin_code": "pin_code",
-                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -6851,7 +6845,6 @@
                                             "web_page": "https://www.facebook.com/",
                                             "identifier_prefix": "identifier_prefix",
                                             "pin_code": "pin_code",
-                                            "enable_auto_business_setup": "enable_auto_business_setup",
                                             "phone": "01771034383",
                                             "email": "rifatalashwad@gmail.com",
                                             "additional_information": "No Additional Information",
@@ -47881,8 +47874,308 @@
     },
     "tags": [
         {
-            "name": "HRM",
-            "description": "API Endpoints of HRM Project"
+            "name": "administrator.announcements",
+            "description": "administrator.announcements"
+        },
+        {
+            "name": "administrator.announcements.client",
+            "description": "administrator.announcements.client"
+        },
+        {
+            "name": "administrator.asset_type",
+            "description": "administrator.asset_type"
+        },
+        {
+            "name": "attendances",
+            "description": "attendances"
+        },
+        {
+            "name": "auth",
+            "description": "auth"
+        },
+        {
+            "name": "banks",
+            "description": "banks"
+        },
+        {
+            "name": "business_background_image",
+            "description": "business_background_image"
+        },
+        {
+            "name": "business_management",
+            "description": "business_management"
+        },
+        {
+            "name": "business_tiers",
+            "description": "business_tiers"
+        },
+        {
+            "name": "business_times_management",
+            "description": "business_times_management"
+        },
+        {
+            "name": "candidates",
+            "description": "candidates"
+        },
+        {
+            "name": "comment",
+            "description": "comment"
+        },
+        {
+            "name": "dashboard_management.business_user",
+            "description": "dashboard_management.business_user"
+        },
+        {
+            "name": "dashboard_management.dashboard_widgets",
+            "description": "dashboard_management.dashboard_widgets"
+        },
+        {
+            "name": "dashboard_management.superadmin",
+            "description": "dashboard_management.superadmin"
+        },
+        {
+            "name": "dashboard_management.data_collector",
+            "description": "dashboard_management.data_collector"
+        },
+        {
+            "name": "dashboard_management.business_manager",
+            "description": "dashboard_management.business_manager"
+        },
+        {
+            "name": "administrator.department",
+            "description": "administrator.department"
+        },
+        {
+            "name": "designations",
+            "description": "designations"
+        },
+        {
+            "name": "dropdowns",
+            "description": "dropdowns"
+        },
+        {
+            "name": "z.unused",
+            "description": "z.unused"
+        },
+        {
+            "name": "template_management.email",
+            "description": "template_management.email"
+        },
+        {
+            "name": "template_management.wrapper.email",
+            "description": "template_management.wrapper.email"
+        },
+        {
+            "name": "administrator.employee_rota",
+            "description": "administrator.employee_rota"
+        },
+        {
+            "name": "employee.employment_statuses",
+            "description": "employee.employment_statuses"
+        },
+        {
+            "name": "files",
+            "description": "files"
+        },
+        {
+            "name": "histories",
+            "description": "histories"
+        },
+        {
+            "name": "administrator.holiday",
+            "description": "administrator.holiday"
+        },
+        {
+            "name": "job_listing",
+            "description": "job_listing"
+        },
+        {
+            "name": "job_platforms",
+            "description": "job_platforms"
+        },
+        {
+            "name": "job_types",
+            "description": "job_types"
+        },
+        {
+            "name": "label",
+            "description": "label"
+        },
+        {
+            "name": "leaves",
+            "description": "leaves"
+        },
+        {
+            "name": "modules",
+            "description": "modules"
+        },
+        {
+            "name": "notification_management",
+            "description": "notification_management"
+        },
+        {
+            "name": "template_management.notification",
+            "description": "template_management.notification"
+        },
+        {
+            "name": "payment_type_management",
+            "description": "payment_type_management"
+        },
+        {
+            "name": "administrator.payrolls",
+            "description": "administrator.payrolls"
+        },
+        {
+            "name": "administrator.payruns",
+            "description": "administrator.payruns"
+        },
+        {
+            "name": "user_management",
+            "description": "user_management"
+        },
+        {
+            "name": "shop_section.product_category_management",
+            "description": "shop_section.product_category_management"
+        },
+        {
+            "name": "basics",
+            "description": "basics"
+        },
+        {
+            "name": "shop_section.product_management",
+            "description": "shop_section.product_management"
+        },
+        {
+            "name": "project",
+            "description": "project"
+        },
+        {
+            "name": "recruitment_processes",
+            "description": "recruitment_processes"
+        },
+        {
+            "name": "reminders",
+            "description": "reminders"
+        },
+        {
+            "name": "user_management.role",
+            "description": "user_management.role"
+        },
+        {
+            "name": "service_plans",
+            "description": "service_plans"
+        },
+        {
+            "name": "settings.setting_attendance",
+            "description": "settings.setting_attendance"
+        },
+        {
+            "name": "settings.setting_leave",
+            "description": "settings.setting_leave"
+        },
+        {
+            "name": "settings.setting_leave_types",
+            "description": "settings.setting_leave_types"
+        },
+        {
+            "name": "settings.setting_payment_date",
+            "description": "settings.setting_payment_date"
+        },
+        {
+            "name": "settings.setting_payroll.payrun",
+            "description": "settings.setting_payroll.payrun"
+        },
+        {
+            "name": "settings.setting_payroll.payslip",
+            "description": "settings.setting_payroll.payslip"
+        },
+        {
+            "name": "social_sites",
+            "description": "social_sites"
+        },
+        {
+            "name": "system_setting",
+            "description": "system_setting"
+        },
+        {
+            "name": "task_categories",
+            "description": "task_categories"
+        },
+        {
+            "name": "task",
+            "description": "task"
+        },
+        {
+            "name": "user_address_histories",
+            "description": "user_address_histories"
+        },
+        {
+            "name": "user_assets",
+            "description": "user_assets"
+        },
+        {
+            "name": "user_documents",
+            "description": "user_documents"
+        },
+        {
+            "name": "user_education_histories",
+            "description": "user_education_histories"
+        },
+        {
+            "name": "user_job_histories",
+            "description": "user_job_histories"
+        },
+        {
+            "name": "user_management.employee",
+            "description": "user_management.employee"
+        },
+        {
+            "name": "user_notes",
+            "description": "user_notes"
+        },
+        {
+            "name": "user_passport_histories",
+            "description": "user_passport_histories"
+        },
+        {
+            "name": "user_payslips",
+            "description": "user_payslips"
+        },
+        {
+            "name": "user_pension_histories",
+            "description": "user_pension_histories"
+        },
+        {
+            "name": "employee.recruitment_process",
+            "description": "employee.recruitment_process"
+        },
+        {
+            "name": "user_right_to_work_histories",
+            "description": "user_right_to_work_histories"
+        },
+        {
+            "name": "user_social_sites",
+            "description": "user_social_sites"
+        },
+        {
+            "name": "user_sponsorship_histories",
+            "description": "user_sponsorship_histories"
+        },
+        {
+            "name": "user_visa_histories",
+            "description": "user_visa_histories"
+        },
+        {
+            "name": "work_locations",
+            "description": "work_locations"
+        },
+        {
+            "name": "administrator.work_shift",
+            "description": "administrator.work_shift"
+        },
+        {
+            "name": "work_shift_histories",
+            "description": "work_shift_histories"
         }
     ]
 }

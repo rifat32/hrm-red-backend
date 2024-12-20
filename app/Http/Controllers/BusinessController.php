@@ -79,7 +79,6 @@ class BusinessController extends Controller
      * "identifier_prefix":"identifier_prefix",
      * "pin_code":"pin_code",
      *
-     * "enable_auto_business_setup":"enable_auto_business_setup",
      *  "phone":"01771034383",
      *  "email":"rifatalashwad@gmail.com",
      *  "phone":"01771034383",
@@ -154,7 +153,7 @@ class BusinessController extends Controller
             }
             $request_data = $request->validated();
 
-            $request_data["business"] = $this->businessImageStore($request_data["business"]);
+             $request_data["business"] = $this->businessImageStore($request_data["business"]);
 
 
             $user = User::where([
@@ -391,7 +390,6 @@ class BusinessController extends Controller
      * "web_page":"https://www.facebook.com/",
      * "identifier_prefix":"identifier_prefix",
      * "pin_code":"pin_code",
-     * "enable_auto_business_setup":"enable_auto_business_setup",
      *  "phone":"01771034383",
      *  "email":"rifatalashwad@gmail.com",
      *  "phone":"01771034383",
@@ -468,12 +466,9 @@ class BusinessController extends Controller
             $request_data = $request->validated();
 
 
-
-            $request_data["business"] = $this->businessImageStore($request_data["business"]);
-
+            // $request_data["business"] = $this->businessImageStore($request_data["business"]);
 
             $data = $this->createUserWithBusiness($request_data);
-
 
 
             DB::commit();
@@ -539,6 +534,7 @@ class BusinessController extends Controller
      *
      *
      *  @OA\Property(property="business", type="string", format="array",example={
+     * "is_self_registered_businesses" : 0,
      *   * "number_of_employees_allowed" : 0,
      * "service_plan_id" : 0,
      * "service_plan_discount_code" : 0,
@@ -551,7 +547,6 @@ class BusinessController extends Controller
      * "web_page":"https://www.facebook.com/",
      * "identifier_prefix":"identifier_prefix",
      *  "pin_code":"pin_code",
-     * "enable_auto_business_setup":"enable_auto_business_setup",
      *  "phone":"01771034383",
      *  "email":"rifatalashwad@gmail.com",
      *  "phone":"01771034383",
@@ -624,12 +619,13 @@ class BusinessController extends Controller
 
 
 
-            $request_data["business"] = $this->businessImageStore($request_data["business"]);
+            // $request_data["business"] = $this->businessImageStore($request_data["business"]);
 
             // $request_data['business']["active_module_ids"] = [];
 
 
             $data = $this->createUserWithBusiness($request_data);
+
 
             DB::commit();
 
@@ -640,10 +636,11 @@ class BusinessController extends Controller
                 ],
                 201
             );
+
         } catch (Exception $e) {
 
 
-            $this->businessImageRollBack($request_data);
+            // $this->businessImageRollBack($request_data);
 
             DB::rollBack();
             return $this->sendError($e, 500, $request);
@@ -701,7 +698,6 @@ class BusinessController extends Controller
      * "web_page":"https://www.facebook.com/",
      * "identifier_prefix":"identifier_prefix",
      * "pin_code":"pin_code",
-     * "enable_auto_business_setup":"enable_auto_business_setup",
      *  "phone":"01771034383",
      *  "email":"rifatalashwad@gmail.com",
      *  "phone":"01771034383",
@@ -780,7 +776,7 @@ class BusinessController extends Controller
 
             $business = $this->businessOwnerCheck($request_data['business']["id"], TRUE);
 
-            $request_data["business"] = $this->businessImageStore($request_data["business"]);
+            $request_data["business"] = $this->businessImageStore($request_data["business"],$business->id);
 
 
 
@@ -875,7 +871,6 @@ class BusinessController extends Controller
                 "web_page",
                 "identifier_prefix",
                 "pin_code",
-                "enable_auto_business_setup",
                 "phone",
                 "email",
                 "additional_information",
@@ -1439,7 +1434,6 @@ class BusinessController extends Controller
      * "web_page":"https://www.facebook.com/",
      * "identifier_prefix":"identifier_prefix",
      * "pin_code":"pin_code",
-     * "enable_auto_business_setup":"enable_auto_business_setup",
      *  "phone":"01771034383",
      *  "email":"rifatalashwad@gmail.com",
      *  "phone":"01771034383",
@@ -1550,7 +1544,6 @@ class BusinessController extends Controller
                 "web_page",
                 "identifier_prefix",
                 "pin_code",
-                "enable_auto_business_setup",
                 "phone",
                 "email",
                 "additional_information",
@@ -1620,7 +1613,6 @@ class BusinessController extends Controller
      * "web_page":"https://www.facebook.com/",
      * "identifier_prefix":"identifier_prefix",
      * "pin_code":"pin_code",
-     * "enable_auto_business_setup":"enable_auto_business_setup",
      *  "phone":"01771034383",
      *  "email":"rifatalashwad@gmail.com",
      *  "phone":"01771034383",
@@ -1733,8 +1725,7 @@ class BusinessController extends Controller
                 "start_date",
                 "web_page",
                 "identifier_prefix",
-                "pin_code",
-                "enable_auto_business_setup",
+                "pin_code"
 
 
             ])->toArray());
@@ -1804,7 +1795,6 @@ class BusinessController extends Controller
      * "web_page":"https://www.facebook.com/",
      * "identifier_prefix":"identifier_prefix",
      * "pin_code":"pin_code",
-     * "enable_auto_business_setup":"enable_auto_business_setup",
      *  "phone":"01771034383",
      *  "email":"rifatalashwad@gmail.com",
      *  "phone":"01771034383",
@@ -2236,7 +2226,6 @@ class BusinessController extends Controller
      * "web_page":"https://www.facebook.com/",
      * "identifier_prefix":"identifier_prefix",
      * "pin_code":"pin_code",
-     * "enable_auto_business_setup":"enable_auto_business_setup",
      *
      *  "phone":"01771034383",
      *  "email":"rifatalashwad@gmail.com",
@@ -2324,7 +2313,7 @@ class BusinessController extends Controller
                 "web_page",
                 "identifier_prefix",
                 "pin_code",
-                "enable_auto_business_setup",
+
                 "phone",
                 "email",
                 "additional_information",
@@ -2938,7 +2927,6 @@ class BusinessController extends Controller
                     "web_page",
                     'identifier_prefix',
                     "pin_code",
-                    'enable_auto_business_setup',
                     "reseller_id"
                 )
                 ->first();

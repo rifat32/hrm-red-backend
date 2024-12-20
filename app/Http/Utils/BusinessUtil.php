@@ -806,22 +806,22 @@ trait BusinessUtil
     // }
 
 
-    public function businessImageStore($business)
+    public function businessImageStore($business,$business_id=NULL)
     {
         if (!empty($business["images"])) {
-            $business["images"] = $this->storeUploadedFiles($business["images"], "", "business_images");
+            $business["images"] = $this->storeUploadedFiles($business["images"], "", "business_images",NULL,$business_id);
             $this->makeFilePermanent($business["images"], "");
         }
         if (!empty($business["image"])) {
-            $business["image"] = $this->storeUploadedFiles([$business["image"]], "", "business_images")[0];
+            $business["image"] = $this->storeUploadedFiles([$business["image"]], "", "business_images",NULL,$business_id)[0];
             $this->makeFilePermanent([$business["image"]], "");
         }
         if (!empty($business["logo"])) {
-            $business["logo"] = $this->storeUploadedFiles([$business["logo"]], "", "business_images")[0];
+            $business["logo"] = $this->storeUploadedFiles([$business["logo"]], "", "business_images",NULL,$business_id)[0];
             $this->makeFilePermanent([$business["logo"]], "");
         }
         if (!empty($business["background_image"])) {
-            $business["background_image"] = $this->storeUploadedFiles([$business["background_image"]], "", "business_images")[0];
+            $business["background_image"] = $this->storeUploadedFiles([$business["background_image"]], "", "business_images",NULL,$business_id)[0];
             $this->makeFilePermanent([$business["background_image"]], "");
         }
         return $business;
@@ -898,6 +898,12 @@ trait BusinessUtil
 
 
         $user =  User::create($request_data['user']);
+
+        if (!auth()->check()) {
+            Auth::login($user);
+        }
+
+
 
 
         $user->assignRole('business_owner');

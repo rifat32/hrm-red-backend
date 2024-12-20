@@ -40,7 +40,7 @@ class BusinessCreateRequest extends BaseFormRequest
             'business.web_page' => 'nullable|string',
             'business.identifier_prefix' => 'nullable|string',
             'business.pin_code' => 'nullable|string',
-            'business.enable_auto_business_setup' => 'nullable|boolean',
+
             'business.phone' => 'nullable|string',
             // 'business.email' => 'required|string|email|indisposable|max:255|unique:businesses,email',
             'business.email' => 'nullable|string|email|max:255|unique:businesses,email',
@@ -94,7 +94,6 @@ class BusinessCreateRequest extends BaseFormRequest
             'business.web_page.string' => 'The web page field must be a string.',
             'business.identifier_prefix.string' => 'The identifier prefix field must be a string.',
               'business.pin_code.string' => 'The pin code field must be a string.',
-            'business.enable_auto_business_setup.boolean' => 'The identifier prefix field must be a boolean.',
             'business.phone.string' => 'The phone field must be a string.',
             // 'business.email.required' => 'The email field is required.',
             'business.email.string' => 'The email field must be a string.',

@@ -72,7 +72,7 @@ class AuthRegisterBusinessRequest extends BaseFormRequest
             'business.identifier_prefix' => 'nullable|string',
             'business.pin_code' => 'nullable|string',
 
-            'business.enable_auto_business_setup' => 'nullable|boolean',
+
 
             'business.phone' => 'nullable|string',
             // 'business.email' => 'required|string|email|indisposable|max:255|unique:businesses,email',
@@ -91,12 +91,12 @@ class AuthRegisterBusinessRequest extends BaseFormRequest
             'business.address_line_2' => 'nullable|string',
 
 
-            'business.logo' => 'nullable|string',
+            // 'business.logo' => 'nullable|string',
 
-            'business.image' => 'nullable|string',
+            // 'business.image' => 'nullable|string',
 
-            'business.images' => 'nullable|array',
-            'business.images.*' => 'nullable|string',
+            // 'business.images' => 'nullable|array',
+            // 'business.images.*' => 'nullable|string',
 
 
 
@@ -228,7 +228,7 @@ class AuthRegisterBusinessRequest extends BaseFormRequest
             'business.web_page.string' => 'The web page must be a string.',
             'business.identifier_prefix.string' => 'The identifier prefix field must be a string.',
               'business.pin_code.string' => 'The pin code field must be a string.',
-            'business.enable_auto_business_setup.boolean' => 'The identifier prefix field must be a boolean.',
+
 
 
             'business.phone.string' => 'The phone must be a string.',
