@@ -892,8 +892,7 @@ class BusinessController extends Controller
                 "service_plan_id",
                 "service_plan_discount_code",
                 "service_plan_discount_amount",
-
-
+                
                 "pension_scheme_registered",
                 "pension_scheme_name",
                 "pension_scheme_letters",
@@ -983,136 +982,6 @@ class BusinessController extends Controller
 
             return response([
                 "user" => $user,
-                "business" => $business
-            ], 201);
-        } catch (Exception $e) {
-            DB::rollBack();
-
-            return $this->sendError($e, 500, $request);
-        }
-    }
-    /**
-     *
-     * @OA\Put(
-     *      path="/v1.0/businesses-part-4",
-     *      operationId="updateBusinessPart4",
-     *      tags={"business_management"},
-     *       security={
-     *           {"bearerAuth": {}}
-     *       },
-     *      summary="This method is to update user with business",
-     *      description="This method is to update user with business",
-     *
-     *  @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *            required={"user","business"},
-
-     *
-     *  @OA\Property(property="business", type="string", format="array",example={
-     *   *  * "id":1,
-     *      * "trail_end_date" : "",
-     * "is_self_registered_businesses":1,
-     * "service_plan_id" : 0,
-     * "service_plan_discount_code" : 0,
-
-     * "number_of_employees_allowed":20
-     *
-     * }),
-     *
-
-     *
-     *
-
-     *
-     *         ),
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *       @OA\JsonContent(),
-     *       ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     * @OA\JsonContent(),
-     *      ),
-     *        @OA\Response(
-     *          response=422,
-     *          description="Unprocesseble Content",
-     *    @OA\JsonContent(),
-     *      ),
-     *      @OA\Response(
-     *          response=403,
-     *          description="Forbidden",
-     *   @OA\JsonContent()
-     * ),
-     *  * @OA\Response(
-     *      response=400,
-     *      description="Bad Request",
-     *   *@OA\JsonContent()
-     *   ),
-     * @OA\Response(
-     *      response=404,
-     *      description="not found",
-     *   *@OA\JsonContent()
-     *   )
-     *      )
-     *     )
-     */
-    public function updateBusinessPart4(BusinessUpdateRequestPart4 $request)
-    {
-
-        DB::beginTransaction();
-        try {
-            $this->storeActivity($request, "DUMMY activity", "DUMMY description");
-
-            if (!$request->user()->hasPermissionTo('business_update')) {
-                return response()->json([
-                    "message" => "You can not perform this action"
-                ], 401);
-            }
-
-            $request_data = $request->validated();
-
-
-            $business = $this->businessOwnerCheck($request_data['business']["id"], FALSE);
-
-
-            // $user->syncRoles(["business_owner"]);
-
-
-            if (!empty($request_data["business"]["is_self_registered_businesses"])) {
-                $request_data['business']['service_plan_discount_amount'] = $this->getDiscountAmount($request_data['business']);
-            }
-
-
-            $business->fill(collect($request_data['business'])->only([
-
-                "trail_end_date",
-                "is_self_registered_businesses",
-                "service_plan_id",
-                "service_plan_discount_code",
-                "service_plan_discount_amount",
-                "number_of_employees_allowed",
-            ])->toArray());
-
-            $business->save();
-
-
-            if (empty($business)) {
-                return response()->json([
-                    "massage" => "something went wrong"
-                ], 500);
-            }
-
-
-
-
-            DB::commit();
-
-            return response([
-
                 "business" => $business
             ], 201);
         } catch (Exception $e) {
