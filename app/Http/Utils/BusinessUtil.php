@@ -62,10 +62,10 @@ trait BusinessUtil
         )
         ->first();
 
-
         if (empty($business)) {
             throw new Exception("you are not the owner of the business or the requested business does not exist.", 401);
         }
+
         return $business;
     }
 

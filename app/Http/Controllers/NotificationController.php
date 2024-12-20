@@ -282,8 +282,8 @@ class NotificationController extends Controller
     {
         try {
      $this->storeActivity($request, "DUMMY activity","DUMMY description");
-           
-             $business = $this->businessOwnerCheck($business_id);
+
+             $business = $this->businessOwnerCheck($business_id,FALSE);
 
             $notificationsQuery = Notification::where([
                 "receiver_id" => $request->user()->id,

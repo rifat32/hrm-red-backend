@@ -774,7 +774,7 @@ class BusinessController extends Controller
 
             $request_data = $request->validated();
 
-            $business = $this->businessOwnerCheck($request_data['business']["id"], TRUE);
+            $business = $this->businessOwnerCheck($request_data['business']["id"], FALSE);
 
             $request_data["business"] = $this->businessImageStore($request_data["business"],$business->id);
 
@@ -1076,7 +1076,7 @@ class BusinessController extends Controller
             $request_data = $request->validated();
 
 
-            $business = $this->businessOwnerCheck($request_data['business']["id"], TRUE);
+            $business = $this->businessOwnerCheck($request_data['business']["id"], FALSE);
 
 
             // $user->syncRoles(["business_owner"]);
@@ -1199,7 +1199,7 @@ class BusinessController extends Controller
             $request_data = $request->validated();
 
 
-            $business = $this->businessOwnerCheck($request_data["id"]);
+            $business = $this->businessOwnerCheck($request_data["id"],FALSE);
 
 
             $business->reseller_id = auth()->user()->id;
@@ -1319,7 +1319,7 @@ class BusinessController extends Controller
                 ], 401);
             }
 
-            $business = $this->businessOwnerCheck(auth()->user()->business_id, TRUE);
+            $business = $this->businessOwnerCheck(auth()->user()->business_id, FALSE);
 
             $request_data = $request->validated();
             //    user email check
@@ -1513,7 +1513,7 @@ class BusinessController extends Controller
 
             $request_data = $request->validated();
 
-            $business = $this->businessOwnerCheck($request_data['business']["id"], TRUE);
+            $business = $this->businessOwnerCheck($request_data['business']["id"], FALSE);
 
 
             if (!empty($request_data["business"]["images"])) {
@@ -1691,7 +1691,7 @@ class BusinessController extends Controller
 
             $request_data = $request->validated();
 
-            $business = $this->businessOwnerCheck($request_data['business']["id"], TRUE);
+            $business = $this->businessOwnerCheck($request_data['business']["id"], FALSE);
 
             if (!empty($request_data["business"]["images"])) {
                 $request_data["business"]["images"] = $this->storeUploadedFiles($request_data["business"]["images"], "", "business_images");
@@ -1869,7 +1869,7 @@ class BusinessController extends Controller
                 ], 401);
             }
 
-            $business = $this->businessOwnerCheck(auth()->user()->business_id, TRUE);
+            $business = $this->businessOwnerCheck(auth()->user()->business_id, FALSE);
 
 
 
@@ -2035,7 +2035,7 @@ class BusinessController extends Controller
 
 
             $request_data = $request->validated();
-            $business = $this->businessOwnerCheck($request_data['business']["id"], TRUE);
+            $business = $this->businessOwnerCheck($request_data['business']["id"], FALSE);
 
             $request_data["business"]["pension_scheme_letters"] = $this->storeUploadedFiles($request_data["business"]["pension_scheme_letters"], "", "pension_scheme_letters");
 
@@ -2178,7 +2178,7 @@ class BusinessController extends Controller
             }
             $request_data = $request->validated();
 
-            $business = $this->businessOwnerCheck($request_data["id"], TRUE);
+            $business = $this->businessOwnerCheck($request_data["id"], FALSE);
 
 
             if (empty($business)) {
@@ -2302,7 +2302,7 @@ class BusinessController extends Controller
 
 
             $request_data = $request->validated();
-            $business = $this->businessOwnerCheck($request_data['business']["id"], TRUE);
+            $business = $this->businessOwnerCheck($request_data['business']["id"], FALSE);
 
             //  business info ##############
             // $request_data['business']['status'] = "pending";
@@ -2337,18 +2337,10 @@ class BusinessController extends Controller
 
 
             if (empty($business)) {
-
                 return response()->json([
                     "massage" => "no business found"
                 ], 404);
             }
-
-
-
-
-
-
-
 
             DB::commit();
             return response([
@@ -2540,7 +2532,6 @@ class BusinessController extends Controller
                         });
                     },
                 )
-
                 ->when(!empty($request->search_key), function ($query) use ($request) {
                     $term = $request->search_key;
                     return $query->where(function ($query) use ($term) {
@@ -2673,7 +2664,7 @@ class BusinessController extends Controller
                 ], 401);
             }
 
-            $business = $this->businessOwnerCheck($id);
+            $business = $this->businessOwnerCheck($id,FALSE);
 
             $business->load('owner', 'times', 'service_plan');
 
@@ -2760,7 +2751,7 @@ class BusinessController extends Controller
                  ], 401);
              }
 
-             $business = $this->businessOwnerCheck($id);
+             $business = $this->businessOwnerCheck($id,FALSE);
 
              $businessSubscriptionsQuery = BusinessSubscription::with("service_plan")
                  ->where([
@@ -3017,7 +3008,7 @@ class BusinessController extends Controller
                     "message" => "You can not perform this action"
                 ], 401);
             }
-            $business = $this->businessOwnerCheck($id);
+            $business = $this->businessOwnerCheck($id,FALSE);
 
             if (!is_array($business->pension_scheme_letters) || empty($business->pension_scheme_letters)) {
                 $business->pension_scheme_letters = [];
@@ -3106,7 +3097,7 @@ class BusinessController extends Controller
                     "message" => "You can not perform this action"
                 ], 401);
             }
-            $business = $this->businessOwnerCheck($id);
+            $business = $this->businessOwnerCheck($id,FALSE);
 
             $businessPensionHistoriesQuery =  BusinessPensionHistory::where([
                 "business_id" => $id
