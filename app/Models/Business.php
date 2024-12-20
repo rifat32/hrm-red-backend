@@ -111,10 +111,6 @@ class Business extends Model
         }
 
 
-
-
-
-
         // Return 0 if the business is not active
         if (!$this->is_active) {
             return 0;
