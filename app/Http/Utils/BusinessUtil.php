@@ -901,6 +901,7 @@ trait BusinessUtil
 
         if (!auth()->check()) {
             Auth::login($user);
+            // update
         }
 
 
