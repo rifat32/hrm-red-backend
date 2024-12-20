@@ -3185,7 +3185,6 @@ class BusinessController extends Controller
 
             $idsArray = explode(',', $ids);
             $existingIds = BusinessPensionHistory::whereIn('business_pension_histories.id', $idsArray)
-
                 ->where(function ($query) {
                     $query
                         // ->where('id', auth()->user()->business_id)
@@ -3287,13 +3286,18 @@ class BusinessController extends Controller
 
             $idsArray = explode(',', $ids);
             $existingIds = Business::whereIn('id', $idsArray)
-                ->where(function ($query) {
-                    $query
-                        // ->where('id', auth()->user()->business_id)
-                        // ->orWhere('created_by', auth()->user()->id)
-                        // ->where('owner_id', auth()->user()->id)
-                        ->where('reseller_id', auth()->user()->id);
-                })
+            ->when(
+               !request()->user()->hasRole('superadmin'),
+                 function ($query)  {
+                     $query->where(function ($query) {
+                         $query
+                         // ->where('id', auth()->user()->business_id)
+                         // ->orWhere('created_by', auth()->user()->id)
+                             ->orWhere('reseller_id', auth()->user()->id)
+                             ;
+                     });
+                 },
+             )
                 ->select('id')
                 ->get()
                 ->pluck('id')
