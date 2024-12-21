@@ -4160,6 +4160,186 @@ class UserManagementController extends Controller
          }
      }
 
+ /**
+     *
+     * @OA\Get(
+     *      path="/v7.0/users",
+     *      operationId="getUsersV7",
+     *      tags={"user_management"},
+     *       security={
+     *           {"bearerAuth": {}}
+     *       },
+     *   *              @OA\Parameter(
+     *         name="response_type",
+     *         in="query",
+     *         description="response_type: in pdf,csv,json",
+     *         required=true,
+     *  example="json"
+     *      ),
+     *      *   *              @OA\Parameter(
+     *         name="file_name",
+     *         in="query",
+     *         description="file_name",
+     *         required=true,
+     *  example="employee"
+     *      ),
+     *              @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="per_page",
+     *         required=true,
+     *  example="6"
+     *      ),
+     *      * *  @OA\Parameter(
+     * name="start_date",
+     * in="query",
+     * description="start_date",
+     * required=true,
+     * example="2019-06-29"
+     * ),
+     * *  @OA\Parameter(
+     * name="end_date",
+     * in="query",
+     * description="end_date",
+     * required=true,
+     * example="2019-06-29"
+     * ),
+     *
+     *
+     * @OA\Parameter(
+     * name="full_name",
+     * in="query",
+     * description="full_name",
+     * required=true,
+     * example="full_name"
+     * ),
+
+     *
+     *
+     *
+     *
+     *      summary="This method is to get user",
+     *      description="This method is to get user",
+     *
+
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       @OA\JsonContent(),
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     * @OA\JsonContent(),
+     *      ),
+     *        @OA\Response(
+     *          response=422,
+     *          description="Unprocesseble Content",
+     *    @OA\JsonContent(),
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden",
+     *   @OA\JsonContent()
+     * ),
+     *  * @OA\Response(
+     *      response=400,
+     *      description="Bad Request",
+     *   *@OA\JsonContent()
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found",
+     *   *@OA\JsonContent()
+     *   )
+     *      )
+     *     )
+     */
+
+     public function getUsersV7(Request $request)
+     {
+         try {
+             $this->storeActivity($request, "DUMMY activity", "DUMMY description");
+
+             if (!$request->user()->hasPermissionTo('user_view')) {
+                 return response()->json([
+                     "message" => "You can not perform this action"
+                 ], 401);
+             }
+
+
+             $all_manager_department_ids = $this->get_all_departments_of_manager();
+
+             $usersQuery = User::query();
+
+             $usersQuery = $this->userManagementComponent->updateUsersQuery($all_manager_department_ids, $usersQuery);
+             $usersQuery = $usersQuery->select(
+                 "users.id",
+                 "users.first_Name",
+                 "users.middle_Name",
+                 "users.last_Name",
+                 "users.image",
+                 "users.email",
+                 "users.is_active",
+                 DB::raw('(SELECT COUNT(*) FROM businesses WHERE businesses.created_by = users.id) as resold_businesses_count'),
+                 DB::raw('(SELECT COUNT(*) FROM businesses
+                   WHERE businesses.created_by = users.id
+                   AND businesses.is_active = 1
+                   AND (
+                     businesses.is_self_registered_businesses = 0
+                       OR
+                       EXISTS (
+                         SELECT 1 FROM business_subscriptions
+                         WHERE business_subscriptions.business_id = businesses.id
+                         AND (
+                             (
+                                 business_subscriptions.end_date >= NOW()
+                             AND
+                             business_subscriptions.start_date <= NOW()
+                             )
+                             OR
+                             businesses.trail_end_date >= NOW()  -- Check if trail end date is in the future or today
+                         )
+                     )
+                   )) as active_subscribed_businesses_count')
+             );
+
+
+             $users = $this->retrieveData($usersQuery, "users.first_Name");
+
+             if (request()->input("per_page")) {
+
+
+                 // Modify the paginated items
+                 $modifiedUsers = $users->getCollection()->each(function ($user) {
+                     $user->handle_self_registered_businesses = $user->hasAllPermissions(['handle_self_registered_businesses', 'system_setting_update', 'system_setting_view']) ? 1 : 0;
+                     return $user;
+                 });
+
+                 // Recreate the paginator with modified items
+                 $users = new \Illuminate\Pagination\LengthAwarePaginator(
+                     $modifiedUsers,
+                     $users->total(),
+                     $users->perPage(),
+                     $users->currentPage(),
+                     [
+                         'path' => $users->path(),
+                         'query' => $users->appends(request()->query())->toArray(),
+                     ]
+                 );
+             } else {
+                 $users = $users->each(function ($user) {
+                     $user->handle_self_registered_businesses = $user->hasAllPermissions(['handle_self_registered_businesses', 'system_setting_update', 'system_setting_view']) ? 1 : 0;
+                     return $user;
+                 });
+             }
+
+             return response()->json($users, 200);
+         } catch (Exception $e) {
+
+             return $this->sendError($e, 500, $request);
+         }
+     }
 
 
     /**

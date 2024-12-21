@@ -48,9 +48,6 @@ class User extends Authenticatable
         'weekly_contractual_hours',
         'minimum_working_days_per_week',
         'overtime_rate',
-
-
-
         'phone',
         'image',
         'address_line_1',
@@ -67,11 +64,8 @@ class User extends Authenticatable
 
         "immigration_status",
 
-
         "is_active_visa_details",
         "is_active_right_to_works",
-
-
 
         'bank_id',
         'sort_code',
@@ -84,6 +78,8 @@ class User extends Authenticatable
         "created_by",
          'is_active'
     ];
+
+
 
   public function getHasThisProjectAttribute($value) {
     $request = request();
