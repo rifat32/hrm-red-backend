@@ -142,7 +142,10 @@ return count($all_departments) > 0;
     }
 
 
-
+    public function resold_businesses()
+    {
+        return $this->hasMany(Business::class, 'reseller_id', 'id');
+    }
 
 
     public function holidays() {

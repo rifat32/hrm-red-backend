@@ -48,6 +48,7 @@ use App\Models\Department;
 use App\Models\DepartmentUser;
 use App\Models\EmployeeAddressHistory;
 use App\Models\LeaveRecord;
+use App\Models\Module;
 use App\Models\Role;
 
 use App\Models\User;
@@ -4280,28 +4281,7 @@ class UserManagementController extends Controller
                  "users.last_Name",
                  "users.image",
                  "users.email",
-                 "users.is_active",
-                 DB::raw('(SELECT COUNT(*) FROM businesses WHERE businesses.created_by = users.id) as resold_businesses_count'),
-                 DB::raw('(SELECT COUNT(*) FROM businesses
-                   WHERE businesses.created_by = users.id
-                   AND businesses.is_active = 1
-                   AND (
-                     businesses.is_self_registered_businesses = 0
-                       OR
-                       EXISTS (
-                         SELECT 1 FROM business_subscriptions
-                         WHERE business_subscriptions.business_id = businesses.id
-                         AND (
-                             (
-                                 business_subscriptions.end_date >= NOW()
-                             AND
-                             business_subscriptions.start_date <= NOW()
-                             )
-                             OR
-                             businesses.trail_end_date >= NOW()  -- Check if trail end date is in the future or today
-                         )
-                     )
-                   )) as active_subscribed_businesses_count')
+                 "users.is_active"
              );
 
 
@@ -4313,6 +4293,15 @@ class UserManagementController extends Controller
                  // Modify the paginated items
                  $modifiedUsers = $users->getCollection()->each(function ($user) {
                      $user->handle_self_registered_businesses = $user->hasAllPermissions(['handle_self_registered_businesses', 'system_setting_update', 'system_setting_view']) ? 1 : 0;
+                     $resold_businesses = collect($user->resold_businesses);
+
+                     // Count the total number of resold businesses
+                     $user->resold_businesses_count = $resold_businesses->count();
+
+                     // Count the number of active subscribed businesses
+                     $user->active_subscribed_businesses_count = $resold_businesses->filter(function($business) {
+                         return $business->is_subscribed;
+                     })->count();
                      return $user;
                  });
 
@@ -4330,6 +4319,15 @@ class UserManagementController extends Controller
              } else {
                  $users = $users->each(function ($user) {
                      $user->handle_self_registered_businesses = $user->hasAllPermissions(['handle_self_registered_businesses', 'system_setting_update', 'system_setting_view']) ? 1 : 0;
+                     $resold_businesses = collect($user->resold_businesses);
+
+                     // Count the total number of resold businesses
+                     $user->resold_businesses_count = $resold_businesses->count();
+
+                     // Count the number of active subscribed businesses
+                     $user->active_subscribed_businesses_count = $resold_businesses->filter(function($business) {
+                         return $business->is_subscribed;
+                     })->count();
                      return $user;
                  });
              }
@@ -5498,7 +5496,152 @@ $data["user_data"]["last_activity_date"] = $oldestDate;
         }
     }
 
+   /**
+     *
+     * @OA\Get(
+     *      path="/v4.0/users/{id}",
+     *      operationId="getUserByIdV4",
+     *      tags={"user_management.employee"},
+     *       security={
+     *           {"bearerAuth": {}}
+     *       },
+     *              @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="id",
+     *         required=true,
+     *  example="6"
+     *      ),
 
+     *      summary="This method is to get user by id",
+     *      description="This method is to get user by id",
+     *
+
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       @OA\JsonContent(),
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     * @OA\JsonContent(),
+     *      ),
+     *        @OA\Response(
+     *          response=422,
+     *          description="Unprocesseble Content",
+     *    @OA\JsonContent(),
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden",
+     *   @OA\JsonContent()
+     * ),
+     *  * @OA\Response(
+     *      response=400,
+     *      description="Bad Request",
+     *   *@OA\JsonContent()
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found",
+     *   *@OA\JsonContent()
+     *   )
+     *      )
+     *     )
+     */
+
+     public function getUserByIdV4($id, Request $request)
+     {
+         try {
+             $this->storeActivity($request, "DUMMY activity", "DUMMY description");
+             if (!$request->user()->hasPermissionTo('user_view')) {
+                 return response()->json([
+                     "message" => "You can not perform this action"
+                 ], 401);
+             }
+             $all_manager_department_ids = $this->get_all_departments_of_manager();
+             $user = User::with(
+                 [
+                     "roles",
+                 ]
+
+             )
+
+                 ->where([
+                     "id" => $id
+                 ])
+                 ->when(!$request->user()->hasRole('superadmin'), function ($query) use ($request, $all_manager_department_ids) {
+                     return $query->where(function ($query) use ($all_manager_department_ids) {
+                         return $query->where('created_by', auth()->user()->id)
+                             ->orWhere('id', auth()->user()->id)
+                             ->orWhere('business_id', auth()->user()->business_id)
+                             ->orWhereHas("department_user.department", function ($query) use ($all_manager_department_ids) {
+                                 $query->whereIn("departments.id", $all_manager_department_ids);
+                             });
+                     });
+                 })
+                 ->select(
+                     "users.id",
+                     "users.first_Name",
+                     "users.middle_Name",
+                     "users.last_Name",
+                     "users.email",
+
+                     'users.address_line_1',
+                     'users.address_line_2',
+                     'users.country',
+                     'users.city',
+                     'users.postcode',
+                     'users.gender',
+                     'users.phone',
+                 )
+                 ->first();
+             if (!$user) {
+
+                 return response()->json([
+                     "message" => "no user found"
+                 ], 404);
+             }
+
+
+             $user->handle_self_registered_businesses = $user->hasAllPermissions(['handle_self_registered_businesses', 'system_setting_update', 'system_setting_view']) ? 1 : 0;
+
+
+            //  $modules = Module::where('modules.is_enabled', 1)
+            //      ->orderBy("modules.name", "ASC")
+
+            //      ->select("id", "name")
+            //      ->get()
+
+            //      ->map(function ($item) use ($user) {
+            //          $item->is_enabled = 0;
+
+            //          $resellerModule =    ResellerModule::where([
+            //              "reseller_id" => $user->id,
+            //              "module_id" => $item->id
+            //          ])
+            //              ->first();
+
+            //          if (!empty($resellerModule)) {
+            //              if ($resellerModule->is_enabled) {
+            //                  $item->is_enabled = 1;
+            //              }
+            //          }
+            //          return $item;
+            //      });
+
+            //  $user->modules = $modules;
+
+
+
+
+             return response()->json($user, 200);
+         } catch (Exception $e) {
+
+             return $this->sendError($e, 500, $request);
+         }
+     }
 
     /**
      *
