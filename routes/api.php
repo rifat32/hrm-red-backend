@@ -827,7 +827,7 @@ Route::get('/v1.0/businesses', [BusinessController::class, "getBusinesses"]);
 Route::get('/v1.0/businesses/{id}', [BusinessController::class, "getBusinessById"]);
 Route::get('/v2.0/businesses/{id}', [BusinessController::class, "getBusinessByIdV2"]);
 
-Route::get('/v1.0/businesses-id-by-email/{id}', [BusinessController::class, "getBusinessIdByEmail"]);
+Route::get('/v1.0/businesses-id-by-email/{email}', [BusinessController::class, "getBusinessIdByEmail"]);
 
 
 
