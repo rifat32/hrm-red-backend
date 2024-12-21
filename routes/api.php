@@ -810,7 +810,6 @@ Route::put('/v1.0/businesses', [BusinessController::class, "updateBusiness"]);
 Route::put('/v1.0/businesses-part-1', [BusinessController::class, "updateBusinessPart1"]);
 Route::put('/v1.0/businesses-part-2', [BusinessController::class, "updateBusinessPart2"]);
 Route::put('/v1.0/businesses-part-3', [BusinessController::class, "updateBusinessPart3"]);
-
 Route::put('/v1.0/business-pension-information', [BusinessController::class, "updateBusinessPensionInformation"]);
 
 
@@ -827,6 +826,11 @@ Route::put('/v1.0/businesses/separate', [BusinessController::class, "updateBusin
 Route::get('/v1.0/businesses', [BusinessController::class, "getBusinesses"]);
 Route::get('/v1.0/businesses/{id}', [BusinessController::class, "getBusinessById"]);
 Route::get('/v2.0/businesses/{id}', [BusinessController::class, "getBusinessByIdV2"]);
+
+Route::get('/v1.0/businesses-id-by-email/{id}', [BusinessController::class, "getBusinessIdByEmail"]);
+
+
+
 
 
 Route::delete('/v1.0/businesses/{ids}', [BusinessController::class, "deleteBusinessesByIds"]);

@@ -892,7 +892,7 @@ class BusinessController extends Controller
                 "service_plan_id",
                 "service_plan_discount_code",
                 "service_plan_discount_amount",
-                
+
                 "pension_scheme_registered",
                 "pension_scheme_name",
                 "pension_scheme_letters",
@@ -2803,6 +2803,100 @@ class BusinessController extends Controller
             return $this->sendError($e, 500, $request);
         }
     }
+  /**
+     *
+     * @OA\Get(
+     *      path="/v1.0/businesses-id-by-email/{email}",
+     *      operationId="getBusinessIdByEmail",
+     *      tags={"business_management"},
+     *       security={
+     *           {"bearerAuth": {}}
+     *       },
+     *              @OA\Parameter(
+     *         name="email",
+     *         in="path",
+     *         description="email",
+     *         required=true,
+     *  example="1"
+     *      ),
+     *      summary="This method is to get business id by email",
+     *      description="This method is to get business id by email",
+     *
+
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       @OA\JsonContent(),
+     *       ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     * @OA\JsonContent(),
+     *      ),
+     *        @OA\Response(
+     *          response=422,
+     *          description="Unprocesseble Content",
+     *    @OA\JsonContent(),
+     *      ),
+     *      @OA\Response(
+     *          response=403,
+     *          description="Forbidden",
+     *   @OA\JsonContent()
+     * ),
+     *  * @OA\Response(
+     *      response=400,
+     *      description="Bad Request",
+     *   *@OA\JsonContent()
+     *   ),
+     * @OA\Response(
+     *      response=404,
+     *      description="not found",
+     *   *@OA\JsonContent()
+     *   )
+     *      )
+     *     )
+     */
+
+     public function getBusinessIdByEmail($email, Request $request)
+     {
+
+         try {
+             $this->storeActivity($request, "DUMMY activity", "DUMMY description");
+             if (!$request->user()->hasPermissionTo('business_view')) {
+                 return response()->json([
+                     "message" => "You can not perform this action"
+                 ], 401);
+             }
+
+             $business  = Business::where(["email" => $email])
+                 ->when(
+                     !$request->user()->hasRole('superadmin'),
+                     function ($query) use ($request) {
+                         $query->where(function ($query) {
+                             $query
+                                 // ->where('id', auth()->user()->business_id)
+                                 // ->orWhere('created_by', auth()->user()->id)
+                                 ->orWhere('owner_id', auth()->user()->id)
+                                 ->orWhere('reseller_id', auth()->user()->id)
+                             ;
+                         });
+                     },
+                 )
+                 ->select(
+                     "id"
+                 )
+                 ->first();
+
+             if (empty($business)) {
+                 throw new Exception("you are not the owner of the business or the requested business does not exist.", 401);
+             }
+
+             return response()->json($business, 200);
+         } catch (Exception $e) {
+
+             return $this->sendError($e, 500, $request);
+         }
+     }
 
 
 
